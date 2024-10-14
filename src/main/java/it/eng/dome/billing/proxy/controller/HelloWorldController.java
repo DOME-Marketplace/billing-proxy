@@ -1,4 +1,4 @@
-package it.eng.dome.billing.proxy.rest;
+package it.eng.dome.billing.proxy.controller;
 
 import java.util.Date;
 import java.util.HashMap;
