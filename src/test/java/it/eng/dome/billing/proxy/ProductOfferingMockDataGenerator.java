@@ -8,44 +8,67 @@ import it.eng.dome.tmforum.tmf620.v4.ApiException;
 import it.eng.dome.tmforum.tmf620.v4.Configuration;
 import it.eng.dome.tmforum.tmf620.v4.api.ProductOfferingApi;
 import it.eng.dome.tmforum.tmf620.v4.api.ProductOfferingPriceApi;
+import it.eng.dome.tmforum.tmf620.v4.api.ProductSpecificationApi;
 import it.eng.dome.tmforum.tmf620.v4.model.CharacteristicValueSpecification;
+import it.eng.dome.tmforum.tmf620.v4.model.Duration;
 import it.eng.dome.tmforum.tmf620.v4.model.Money;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOffering;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingCreate;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPrice;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPriceCreate;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPriceRefOrValue;
+import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPriceRelationship;
+import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingTerm;
+import it.eng.dome.tmforum.tmf620.v4.model.ProductSpecification;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductSpecificationCharacteristicValueUse;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductSpecificationRef;
 
 public class ProductOfferingMockDataGenerator {
+	//private static String TMF_SERVER = "https://dome-dev.eng.it";
+	//private static String OFFERING_PORT = "80";
+	//private static String ORDERING_PORT = "80";
 	
+	private static String TMF_SERVER = "http://localhost";
+	private static String CATALOG_PORT = "8100";
+
+
 	public static void main(String[] args) throws URISyntaxException {
 		try {
-			(new ProductOfferingMockDataGenerator()).storeNewProductOffering();
+			ApiClient offeringClient = Configuration.getDefaultApiClient();
+			offeringClient.setBasePath(TMF_SERVER + ":" + CATALOG_PORT + "/tmf-api/productCatalogManagement/v4");
+
+			ProductSpecificationApi specApi = new ProductSpecificationApi(offeringClient);
+
+			ProductSpecification ps = specApi.retrieveProductSpecification("cef424a9-abf8-44a4-b2bc-fda31dd36d6f", null);
+			
+		    (new ProductOfferingMockDataGenerator()).storeNewProductOffering(offeringClient, ps);
 		} catch (ApiException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	void storeNewProductOffering() throws ApiException, URISyntaxException {
-		ApiClient defaultClient = Configuration.getDefaultApiClient();
-	    defaultClient.setBasePath("https://dome-dev.eng.it/tmf-api/productCatalogManagement/v4");
-	    
-	    final ProductOfferingPriceApi popApi = new ProductOfferingPriceApi(defaultClient);
-	    
-		var productSpecRef = new ProductSpecificationRef();
-		productSpecRef.id("urn:ProductSpecification:12345").href(new URI("urn:ProductSpecification:12345"));
+		
+	void storeNewProductOffering(ApiClient offeringClient, ProductSpecification ps) throws ApiException, URISyntaxException {
+	    final var popApi = new ProductOfferingPriceApi(offeringClient);
+		final var productSpecRef = new ProductSpecificationRef();
+		
+		System.out.println(ps.getHref().replace("https", "http"));
+		productSpecRef.id(ps.getId()).href(new URI(ps.getHref()));
 		
 		ProductOfferingPriceCreate smallPriceCreate = createProductOfferingPriceSmall(productSpecRef);
 		ProductOfferingPrice smallPrice = popApi.createProductOfferingPrice(smallPriceCreate);
 		System.out.println("Creato POP small con id: " + smallPrice.getId() + ", href: " + smallPrice.getHref());
 		
-		ProductOfferingPriceCreate largePriceCreate = createProductOfferingPriceLarge(productSpecRef);
+		ProductOfferingPriceCreate discountPopCreate = createSixMonthsDiscount();
+		ProductOfferingPrice discountPop = popApi.createProductOfferingPrice(discountPopCreate);
+		System.out.println("Creato POP discount con id: " + discountPop.getId() + ", href: " + discountPop.getHref());
+		
+		ProductOfferingPriceCreate largePriceCreate = createProductOfferingPriceLarge(productSpecRef, discountPop);
 		ProductOfferingPrice largePrice = popApi.createProductOfferingPrice(largePriceCreate);
 		System.out.println("Creato POP large con id: " + largePrice.getId() + ", href: " + largePrice.getHref());
 		
-	    final ProductOfferingApi offeringApi = new ProductOfferingApi(defaultClient);
+		// Crea la Product Offering
+	    final ProductOfferingApi offeringApi = new ProductOfferingApi(offeringClient);
 	    ProductOfferingCreate poc = createProductOffering();
 	    
 	    var priceItem = new ProductOfferingPriceRefOrValue();
@@ -57,6 +80,8 @@ public class ProductOfferingMockDataGenerator {
 	    priceItem.href(new URI(largePrice.getHref()));
 	    priceItem.id(largePrice.getId());
 	    poc.addProductOfferingPriceItem(priceItem);
+	    
+	    poc.setProductSpecification(productSpecRef);
 	    
 	    System.out.println(poc.toJson());
 
@@ -85,7 +110,7 @@ public class ProductOfferingMockDataGenerator {
 		
 		ProductOfferingPriceCreate pop = new ProductOfferingPriceCreate();
 		pop
-		.name("Alessio Price SMALL")
+		.name("SMALL Price")
 		.description("4CPU, 8GB RAM, 20GB HD: 24 eu per m, recurring prepaid")
 		.version("1.0")
 		.priceType("recurring-prepaid")
@@ -101,11 +126,10 @@ public class ProductOfferingMockDataGenerator {
 			
 			var cpuSpec = new ProductSpecificationCharacteristicValueUse();
 			cpuSpec
-			.id("urn:Characteristic:1234")
 			.name("CPU")
 			.valueType("number")
-			.addProductSpecCharacteristicValueItem(cpuValue);
-			// .setProductSpecification(productSpecRef);
+			.addProductSpecCharacteristicValueItem(cpuValue)
+			.setProductSpecification(productSpecRef);
 			
 			pop.addProdSpecCharValueUseItem(cpuSpec);
 		}
@@ -116,11 +140,10 @@ public class ProductOfferingMockDataGenerator {
 			
 			var ramSpec = new ProductSpecificationCharacteristicValueUse();
 			ramSpec
-			.id("urn:Characteristic:5678")
 			.name("RAM Memory")
 			.valueType("number")
-			.addProductSpecCharacteristicValueItem(ramValue);
-			//.setProductSpecification(productSpecRef);
+			.addProductSpecCharacteristicValueItem(ramValue)
+			.setProductSpecification(productSpecRef);
 			
 			pop.addProdSpecCharValueUseItem(ramSpec);
 		}
@@ -131,11 +154,10 @@ public class ProductOfferingMockDataGenerator {
 			
 			var diskSpec = new ProductSpecificationCharacteristicValueUse();
 			diskSpec
-			.id("urn:Characteristic:09876")
 			.name("Storage")
 			.valueType("number")
-			.addProductSpecCharacteristicValueItem(diskValue);
-			//.setProductSpecification(productSpecRef);
+			.addProductSpecCharacteristicValueItem(diskValue)
+			.setProductSpecification(productSpecRef);
 			
 			pop.addProdSpecCharValueUseItem(diskSpec);
 		}
@@ -143,7 +165,31 @@ public class ProductOfferingMockDataGenerator {
 		return pop;
 	}
 	
-	private ProductOfferingPriceCreate createProductOfferingPriceLarge(ProductSpecificationRef productSpecRef) {
+	
+	private ProductOfferingPriceCreate createSixMonthsDiscount() {
+		ProductOfferingPriceCreate pop = new ProductOfferingPriceCreate();
+		pop
+		.name("Six months 50% special price")
+		.description("Six months 50% special price")
+		.version("1.0")
+		.priceType("discount")
+		.percentage(50F)
+		.isBundle(false)
+		.lifecycleStatus("Active");
+				
+		ProductOfferingTerm durationTerm = new ProductOfferingTerm();
+		Duration duration = new Duration();
+		duration.amount(6).units("month");
+		durationTerm.setDuration(duration);
+		
+		pop.addProductOfferingTermItem(durationTerm);
+		
+		return pop;
+	}
+	
+	
+	private ProductOfferingPriceCreate createProductOfferingPriceLarge(ProductSpecificationRef productSpecRef,
+			ProductOfferingPrice discountPop) throws URISyntaxException {
 		Money price = new Money();
 		price.value(30F).unit("EUR");
 		
@@ -165,7 +211,6 @@ public class ProductOfferingMockDataGenerator {
 			
 			var cpuSpec = new ProductSpecificationCharacteristicValueUse();
 			cpuSpec
-			.id("urn:Characteristic:1234")
 			.name("CPU")
 			.valueType("number")
 			.addProductSpecCharacteristicValueItem(cpuValue);
@@ -180,7 +225,6 @@ public class ProductOfferingMockDataGenerator {
 			
 			var ramSpec = new ProductSpecificationCharacteristicValueUse();
 			ramSpec
-			.id("urn:Characteristic:5678")
 			.name("RAM Memory")
 			.valueType("number")
 			.addProductSpecCharacteristicValueItem(ramValue);
@@ -195,13 +239,23 @@ public class ProductOfferingMockDataGenerator {
 			
 			var diskSpec = new ProductSpecificationCharacteristicValueUse();
 			diskSpec
-			.id("urn:Characteristic:09876")
 			.name("Storage")
 			.valueType("number")
 			.addProductSpecCharacteristicValueItem(diskValue);
 			//.setProductSpecification(productSpecRef);
 			
 			pop.addProdSpecCharValueUseItem(diskSpec);
+		}
+		
+		// Add discount
+		if (discountPop != null) {
+			ProductOfferingPriceRelationship discountRel = new ProductOfferingPriceRelationship();
+			discountRel
+			.relationshipType("discount")
+			.href(new URI(discountPop.getHref()))
+			.id(discountPop.getId());
+			
+			pop.addPopRelationshipItem(discountRel);
 		}
 		
 		return pop;
