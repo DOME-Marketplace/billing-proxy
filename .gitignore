@@ -19,3 +19,5 @@ tmp/
 *.bak
 *.swp
 *~.nib
+/.apt_generated/
+/.apt_generated_tests/
