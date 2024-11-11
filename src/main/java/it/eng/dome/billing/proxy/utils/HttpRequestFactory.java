@@ -1,6 +1,7 @@
 package it.eng.dome.billing.proxy.utils;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import lombok.NonNull;
@@ -35,7 +36,7 @@ public class HttpRequestFactory {
 	      .url(urlBuilder.build().toString())
 	      .header(USER_AGENT_NAME, USER_AGENT_VALUE)
 	      .addHeader(CONTENT_TYPE, JSON.toString())
-	      .post(RequestBody.create(body.getBytes(Charset.forName("UTF-8")), JSON))
+	      .post(RequestBody.create(body.getBytes(StandardCharsets.UTF_8), JSON))
 	      .build();
 	    	    
 	    // Creates the call
