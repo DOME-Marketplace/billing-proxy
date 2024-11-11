@@ -3,8 +3,6 @@
 ##############################
 /target/
 /target/*
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
 
 ##############################
 ## Eclipse
@@ -19,5 +17,3 @@ tmp/
 *.bak
 *.swp
 *~.nib
-/.apt_generated/
-/.apt_generated_tests/
