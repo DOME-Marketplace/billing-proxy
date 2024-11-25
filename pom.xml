@@ -43,22 +43,30 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-        
+		</dependency>        
         <!-- TMForum SDK dependencies -->
+		<!-- TMF622 Ordering -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf622-v4</artifactId>
             <version>1.0.0</version>
         </dependency> 
+		<!-- TMF678 Customer Bill -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf678-v4</artifactId>
             <version>1.0.0</version>
         </dependency>
+		<!-- TMF620 Catalog -->
         <dependency>
             <groupId>it.eng.dome.tmforum-sdk</groupId>
             <artifactId>tmf620-v4</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+		<!-- TMF637 Inventory -->
+        <dependency>
+            <groupId>it.eng.dome.tmforum-sdk</groupId>
+            <artifactId>tmf637-v4</artifactId>
             <version>1.0.0</version>
         </dependency>
         
@@ -72,12 +80,12 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>${okhttp-version}</version>
+            <version>${okhttp-version}</version><!--$NO-MVN-MAN-VER$-->
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
-            <version>${okhttp-version}</version>
+            <version>${okhttp-version}</version><!--$NO-MVN-MAN-VER$-->
         </dependency>
 	</dependencies>
 
