@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BillingProxyApplicationTests {
+class BillingProxyControllerTests {
 
 	@Test
 	void contextLoads() {
@@ -29,7 +29,7 @@ class BillingProxyApplicationTests {
     @Test
     public void shouldReturnExpectedMessage() throws Exception {
 
-        mockMvc.perform(get("/admin/info").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/proxy/info").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.version").value(buildProperties.getVersion()))
             .andExpect(jsonPath("$.name").value(buildProperties.getName()));
