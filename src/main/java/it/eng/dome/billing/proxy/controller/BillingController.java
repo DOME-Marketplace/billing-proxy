@@ -1,48 +1,77 @@
 package it.eng.dome.billing.proxy.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.eng.dome.billing.proxy.services.BillingEngineService;
-import it.eng.dome.tmforum.tmf622.v4.model.Product;
-import it.eng.dome.tmforum.tmf678.v4.model.CustomerBill;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import it.eng.dome.billing.proxy.service.BillingProxyService;
+import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
+
 
 @RestController
 @RequestMapping("/billing")
 public class BillingController {
-    private static final Logger log = LoggerFactory.getLogger(BillingController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BillingController.class);
 
 	@Autowired
-	private BillingEngineService billingEngine;
+	protected BillingProxyService billing;
 
-	@RequestMapping(value = "/bill", method = RequestMethod.POST, consumes="application/json")
-	public List<CustomerBill> bill(@RequestBody Product product) throws Exception {
-		return new ArrayList<CustomerBill>();
-		/*
-		 * TODO: 
-		 * 1) a partire dal product ricevuto in input deve recuperare il
-		 *    Provider che vende quel prodotto (probabilmente tramite
-		 *    la relazione relatedParty)
-		 * 2) recuperato il Provider tramite la sua configurazione deve 
-		 *    capire quel Provider vuole usare il proprio billing engine
-		 *    o quello di dome
-		 */
-		/*
-		try {
-			return billingEngine.computeBills(product);
-		} catch (Exception e) {
-			log.error("Errore nell'invocazione del Billing Engine", e);
-			throw e;
-		}
-		*/
+	@RequestMapping(value = "/pricePreview", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public ResponseEntity<String> calculatePricePreview(@RequestBody String orderJson) throws Throwable {
+		logger.info("Received request to calculate price preview");
+		return billing.pricePreview(orderJson);
 	}
 
+	
+	@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public ResponseEntity<String> calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
+		logger.info("Received request to calculate the bill");
+		
+		String json = getBillRequestDTOtoJson(billRequestDTO);
+		logger.debug(json);
+		
+		return billing.bill(json);
+	}
+	
+	private String getBillRequestDTOtoJson(BillingRequestDTO billRequestDTO) {
+		// product
+		String productJson = billRequestDTO.getProduct().toJson();
+		
+		// timePeriod
+		String timePeriodJson = billRequestDTO.getTimePeriod().toJson();
+		
+		// productPriceListJson
+		StringBuilder productPriceListJson = new StringBuilder("[");
+		for (int i = 0; i < billRequestDTO.getProductPrice().size(); i++) {
+            if (i > 0) {
+            	productPriceListJson.append(", ");
+            }
+            productPriceListJson.append(billRequestDTO.getProductPrice().get(i).toJson());
+        }
+		productPriceListJson.append("]");
+		
+		return "{ \"product\": " + capitalizeStatus(productJson) + ", \"timePeriod\": "+ timePeriodJson + ", \"productPrice\": "+ productPriceListJson +"}";
+	} 
+	
+	private String capitalizeStatus(String json) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String capitalize = json;
+		 try {
+			ObjectNode jsonNode = (ObjectNode) objectMapper.readTree(json);
+			 String status = jsonNode.get("status").asText();
+			 jsonNode.put("status", status.toUpperCase());
+			 return objectMapper.writeValueAsString(jsonNode);
+
+		} catch (Exception e) {			
+			return capitalize;
+		}
+	}
 }

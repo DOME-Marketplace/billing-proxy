@@ -12,7 +12,7 @@
 		
 	<groupId>it.eng.dome.billing</groupId>
 	<artifactId>proxy</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>Billing Proxy</name>
 	<description>Billing Proxy for DOME project</description>
 	
@@ -43,32 +43,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>        
-        <!-- TMForum SDK dependencies -->
-		<!-- TMF622 Ordering -->
-        <dependency>
-            <groupId>it.eng.dome.tmforum-sdk</groupId>
-            <artifactId>tmf622-v4</artifactId>
-            <version>1.0.0</version>
-        </dependency> 
-		<!-- TMF678 Customer Bill -->
-        <dependency>
-            <groupId>it.eng.dome.tmforum-sdk</groupId>
-            <artifactId>tmf678-v4</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-		<!-- TMF620 Catalog -->
-        <dependency>
-            <groupId>it.eng.dome.tmforum-sdk</groupId>
-            <artifactId>tmf620-v4</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-		<!-- TMF637 Inventory -->
-        <dependency>
-            <groupId>it.eng.dome.tmforum-sdk</groupId>
-            <artifactId>tmf637-v4</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+		</dependency>   
+		
+		<!-- Brokerage Utils dependencies -->
+		<dependency>
+			<groupId>it.eng.dome.brokerage</groupId>
+			<artifactId>brokerage-utils</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<!-- Spring Boot Actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		     
         
         <!-- Springdoc OpenAPI dependency -->
 	    <dependency>

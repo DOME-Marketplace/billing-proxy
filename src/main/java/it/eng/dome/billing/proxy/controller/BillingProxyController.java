@@ -21,10 +21,10 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@RequestMapping("/admin")
-public class ServiceAdminController {
+@RequestMapping("/proxy")
+public class BillingProxyController {
 
-	private static final Logger log = LoggerFactory.getLogger(ServiceAdminController.class);
+	private static final Logger log = LoggerFactory.getLogger(BillingProxyController.class);
 
     @Autowired
     private BuildProperties buildProperties;
