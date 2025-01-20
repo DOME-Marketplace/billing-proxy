@@ -23,6 +23,14 @@ public class BillingController {
 
 	@Autowired
 	protected BillingProxyService billing;
+	
+	 /**
+	 * The POST /billing/previewPrice REST API is invoked to calculate the price preview (i.e., prices and taxes) of a ProcuctOrder (TMF622-v4).
+	 * 
+	 * @param orderJson The ProductOrder (TMF622-v4) as a Json string for which the prices and taxes must be calculated
+	 * @return The ProductOrder as a Json string with prices and taxes
+	 * @throws Throwable If an error occurs during the calculation of the product order's price preview
+	 */ 
 
 	@RequestMapping(value = "/pricePreview", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public ResponseEntity<String> calculatePricePreview(@RequestBody String orderJson) throws Throwable {
@@ -30,6 +38,13 @@ public class BillingController {
 		return billing.pricePreview(orderJson);
 	}
 
+	 /**
+     * The POST /billing/bill REST API is invoked to calculate the bill of a Product (TMF637-v4) without taxes.
+     * 
+     * @param BillingRequestDTO The DTO contains information about the Product (TMF637-v4), the TimePeriod (TMF678-v4) and the list of ProductPrice (TMF637-v4) for which the bill must be calculated.
+     * @return The list of AppliedCustomerBillingRate as a Json without taxes
+     * @throws Throwable If an error occurs during the calculation of the bill for the Product
+     */
 	
 	@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public ResponseEntity<String> calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
@@ -41,6 +56,13 @@ public class BillingController {
 		return billing.bill(json);
 	}
 	
+	 /**
+     * The POST /billing/bill REST API is invoked to calculate the bill of a Product (TMF637-v4) without taxes.
+     * 
+     * @param BillingRequestDTO The DTO contains information about the Product (TMF637-v4), the TimePeriod (TMF678-v4) and the list of ProductPrice (TMF637-v4) for which the bill must be calculated.
+     * @return The list of AppliedCustomerBillingRate as a Json without taxes
+     * @throws Throwable If an error occurs during the calculation of the bill for the Product
+     */
 	private String getBillRequestDTOtoJson(BillingRequestDTO billRequestDTO) {
 		// product
 		String productJson = billRequestDTO.getProduct().toJson();

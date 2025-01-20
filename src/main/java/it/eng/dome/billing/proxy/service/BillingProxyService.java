@@ -23,14 +23,13 @@ public class BillingProxyService implements IProxyService {
 	public String billinEngine;
 
 
-	public ResponseEntity<String> pricePreview(String appliedCustomerBillingRates) {
+	public ResponseEntity<String> previewPrice(String order) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<String> request = new HttpEntity<>(appliedCustomerBillingRates, headers);
+		HttpEntity<String> request = new HttpEntity<>(order, headers);
 		
-		logger.debug("Payload received:\n" + appliedCustomerBillingRates);
-		//TODO replace in the future ....  /billing/pricePreview
-		ResponseEntity<String> response = restTemplate.postForEntity(billinEngine + "/price/order", request, String.class);
+		logger.debug("Payload received:\n" + order);
+		ResponseEntity<String> response = restTemplate.postForEntity(billinEngine + "/billing/previewPrice", request, String.class);
 		
 		logger.debug("Headers: " + response.getHeaders().toString());
 		logger.debug("Body:\n" + response.getBody().toString());
@@ -45,4 +44,5 @@ public class BillingProxyService implements IProxyService {
 		//logger.debug("Payload received:\n" + billRequest);
 		return restTemplate.postForEntity(billinEngine + "/billing/bill", request, String.class);
 	}
+
 }
