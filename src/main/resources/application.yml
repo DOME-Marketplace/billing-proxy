@@ -1,7 +1,7 @@
 
 # Spring Configuration
 server: 
-  port: 8280
+  port: 8080
 
 application:
   name: "@project.artifactId@"
@@ -20,7 +20,7 @@ logging:
 # Spring Boot Actuator
 management:
   server:
-    port: 9002
+    port: 9000
   endpoints:
     enabled-by-default: false
     web:
