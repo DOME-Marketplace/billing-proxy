@@ -1,11 +1,13 @@
 package it.eng.dome.billing.proxy.service;
 
-import org.springframework.http.ResponseEntity;
-
 public interface IProxyService {
-	
-	public ResponseEntity<String> previewPrice(String order);
-	
-	public ResponseEntity<String> bill(String billRequest);
+
+	public String billingPreviewPrice(String order);
+
+	public String invoicingPreviewTaxes(String order);
+
+	public String bill(String bill);
+
+	public String billApplyTaxes(String bill);
 
 }

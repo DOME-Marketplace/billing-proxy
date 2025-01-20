@@ -21,28 +21,88 @@ public class BillingProxyService implements IProxyService {
 
 	@Value("${billing.billing_engine}")
 	public String billinEngine;
+	
+	@Value("${billing.invoicing_service}")
+	public String invoicingService;
+	
 
 
-	public ResponseEntity<String> previewPrice(String order) {
+	public String billingPreviewPrice(String order) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> request = new HttpEntity<>(order, headers);
 		
-		logger.debug("Payload received:\n" + order);
+		logger.debug("Payload billing preview price received:\n" + order);
 		ResponseEntity<String> response = restTemplate.postForEntity(billinEngine + "/billing/previewPrice", request, String.class);
-		
-		logger.debug("Headers: " + response.getHeaders().toString());
-		logger.debug("Body:\n" + response.getBody().toString());
-		
-		return response;
+			
+		if (response != null && response.getBody() != null) {
+			logger.debug("Headers: " + response.getHeaders().toString());
+			logger.debug("Body:\n" + response.getBody().toString());
+			return response.getBody().toString();
+		}else {
+			logger.warn("Response: ", (response == null) ? response : response.getBody());
+			logger.debug("Cannot retrieve the billing preview price from {}", billinEngine);
+			return null;
+		}
 	}
-
-	public ResponseEntity<String> bill(String billRequest) {
+	
+	public String invoicingPreviewTaxes(String order) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<String> request = new HttpEntity<>(billRequest, headers);
-		//logger.debug("Payload received:\n" + billRequest);
-		return restTemplate.postForEntity(billinEngine + "/billing/bill", request, String.class);
+		HttpEntity<String> request = new HttpEntity<>(order, headers);
+
+		logger.debug("Payload invoicing preview taxes received:\n" + order);
+		ResponseEntity<String> response = restTemplate.postForEntity(invoicingService + "/invoicing/previewTaxes", request, String.class);
+		
+		if (response != null && response.getBody() != null) {
+			logger.debug("Headers: " + response.getHeaders().toString());
+			logger.debug("Body:\n" + response.getBody().toString());
+			return response.getBody().toString();
+		
+		}else {
+			logger.warn("Response: ", (response == null) ? response : response.getBody());
+			logger.debug("Cannot retrieve the invoicing preview price from {}", invoicingService);
+			return null;
+		}
+	}
+	
+
+	public String bill(String bill) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> request = new HttpEntity<>(bill , headers);
+		logger.debug("Payload bill received:\n" + bill);
+		ResponseEntity<String> response = restTemplate.postForEntity(billinEngine + "/billing/bill", request, String.class);
+		
+		if (response != null && response.getBody() != null) {
+			logger.debug("Headers: " + response.getHeaders().toString());
+			logger.debug("Body:\n" + response.getBody().toString());
+			return response.getBody().toString();
+		
+		}else {
+			logger.warn("Response: ", (response == null) ? response : response.getBody());
+			logger.debug("Cannot retrieve the bill from {}", billinEngine);
+			return null;
+		}
+	}
+	
+	public String billApplyTaxes(String bill) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> request = new HttpEntity<>(bill , headers);
+		logger.debug("Payload bill apply taxes received:\n" + bill);
+		ResponseEntity<String> response = restTemplate.postForEntity(invoicingService + "/invoicing/applyTaxes", request, String.class);
+		
+		if (response != null && response.getBody() != null) {
+			logger.debug("Headers: " + response.getHeaders().toString());
+			logger.debug("Body:\n" + response.getBody().toString());
+			return response.getBody().toString();
+		
+		}else {
+			logger.warn("Response: ", (response == null) ? response : response.getBody());
+			logger.debug("Cannot retrieve the bill apply taxes from {}", invoicingService);
+			return null;
+		}
 	}
 
 }

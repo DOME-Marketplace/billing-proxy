@@ -15,7 +15,7 @@ build:
 logging:
   level:
     it.eng.dome: ${LOG_LEVEL:DEBUG}
-    org: TRACE
+    #org: TRACE
 
 # Spring Boot Actuator
 management:

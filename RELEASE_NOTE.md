@@ -2,10 +2,15 @@
 
 **Release Notes** of the *Billing Scheduler* software:
 
+### <code>0.0.3</code> :calendar: 20/01/2025
+**Feature**
+* Add **proxy** functionalities: **preview mode** - `billingPreviewPrice` and `invoicingPreviewTaxes`, **bill mode** - `bill` and `billApplyTaxes`. 
+
 
 ### <code>0.0.2</code> :calendar: 11/11/2024
 **Feature**
 * Add swagger UI for REST APIs.
+
 
 **Improvements**
 * Usage of **BuildProperties** to get info from `pom.xml` instead of from the `application.yaml`.
