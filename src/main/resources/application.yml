@@ -20,10 +20,10 @@ logging:
 # Swagger prefix 
 springdoc:
   api-docs:
-    path: ${SWAGGER_PREFIX:/billing-proxy}/swagger-ui/v3/api-docs
+    path: ${SWAGGER_PREFIX:}/swagger-ui/v3/api-docs
   swagger-ui:
-    path: ${SWAGGER_PREFIX:/billing-proxy}/
-    url: ${SWAGGER_PREFIX:/billing-proxy}/swagger-ui/v3/api-docs
+    path: ${SWAGGER_PREFIX:}/
+    url: ${SWAGGER_PREFIX:}/swagger-ui/v3/api-docs
 
 # Spring Boot Actuator
 management:
