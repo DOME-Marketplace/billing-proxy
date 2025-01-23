@@ -17,6 +17,14 @@ logging:
     it.eng.dome: ${LOG_LEVEL:DEBUG}
     #org: TRACE
 
+# Swagger prefix 
+springdoc:
+  api-docs:
+    path: ${SWAGGER_PREFIX:/billing-proxy}/swagger-ui/v3/api-docs
+  swagger-ui:
+    path: ${SWAGGER_PREFIX:/billing-proxy}/
+    url: ${SWAGGER_PREFIX:/billing-proxy}/swagger-ui/v3/api-docs
+
 # Spring Boot Actuator
 management:
   server:

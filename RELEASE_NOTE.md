@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Billing Scheduler* software:
 
+### <code>0.0.4</code> :calendar: 23/01/2025
+**Feature**
+* Usage of **SWAGGER_PREFIX** to add prefix for **Swagger APIs**. Use `/billing-engine` in Kubernetes if you separate different billing service (as Ingress path routing). 
+
 ### <code>0.0.3</code> :calendar: 20/01/2025
 **Feature**
 * Add **proxy** functionalities: **preview mode** - `billingPreviewPrice` and `invoicingPreviewTaxes`, **bill mode** - `bill` and `billApplyTaxes`. 
