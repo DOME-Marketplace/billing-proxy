@@ -2,6 +2,8 @@
 # Spring Configuration
 server: 
   port: 8080
+  servlet:
+    context-path:  ${BILLING_ENGINE_PREFIX:/}
 
 application:
   name: "@project.artifactId@"
@@ -16,14 +18,6 @@ logging:
   level:
     it.eng.dome: ${LOG_LEVEL:DEBUG}
     #org: TRACE
-
-# Swagger prefix 
-springdoc:
-  api-docs:
-    path: ${SWAGGER_PREFIX:}/swagger-ui/v3/api-docs
-  swagger-ui:
-    path: ${SWAGGER_PREFIX:}/
-    url: ${SWAGGER_PREFIX:}/swagger-ui/v3/api-docs
 
 # Spring Boot Actuator
 management:
