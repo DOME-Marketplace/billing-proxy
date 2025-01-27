@@ -2,6 +2,10 @@
 
 **Release Notes** of the *Billing Scheduler* software:
 
+### <code>0.0.4</code> :calendar: 27/01/2025
+**Feature**
+* Added **proxy** functionalities: **bill** - `billing/bill` - **bill for a specific date** - `billing/billForDate` -  ** instant bill** - `billing/instantBill`
+
 ### <code>0.0.3</code> :calendar: 20/01/2025
 **Feature**
 * Add **proxy** functionalities: **preview mode** - `billingPreviewPrice` and `invoicingPreviewTaxes`, **bill mode** - `bill` and `billApplyTaxes`. 
