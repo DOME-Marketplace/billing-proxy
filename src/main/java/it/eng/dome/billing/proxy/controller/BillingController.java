@@ -1,5 +1,9 @@
 package it.eng.dome.billing.proxy.controller;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
+import it.eng.dome.tmforum.tmf637.v4.model.Product;
+import it.eng.dome.tmforum.tmf637.v4.model.ProductOfferingPriceRef;
+import it.eng.dome.tmforum.tmf637.v4.model.ProductPrice;
+import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
 import it.eng.dome.billing.proxy.service.BillingProxyService;
 
 
@@ -50,7 +58,7 @@ public class BillingController {
 	
 	@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public String calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
-		logger.info("Received request to calculate the bill");
+		logger.info("Received billingRequestDTO to calculate the bill");
 		
 		String json = getBillRequestDTOtoJson(billRequestDTO);
 		
@@ -59,7 +67,32 @@ public class BillingController {
 		logger.info("Calculate Invoicing (bill) to apply Taxes");
 		return billing.billApplyTaxes(billWithPrice);
 	}
+
 	
+	@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public String calculateInstantBill(@RequestBody Product product) throws Throwable {
+		logger.info("Received product request to calculate the instantBill");
+		
+		OffsetDateTime now = OffsetDateTime.now();
+		TimePeriod tp = new TimePeriod().startDateTime(now).endDateTime(now);	
+		String productId = product.getId();
+		//TODO come recuperare il ProductPrice
+		ArrayList<ProductPrice> productPriceList = new ArrayList<ProductPrice>();
+		
+		ProductPrice pp = new ProductPrice();
+		ProductOfferingPriceRef popr = new ProductOfferingPriceRef();
+		popr.setId("urn:ngsi-ld:product-offering-price:38b293a6-92db-4ca3-8fe6-54a6e4a9e12c");
+		pp.setPriceType("recurring");
+		pp.setProductOfferingPrice(popr);
+		productPriceList.add(pp);
+
+		BillingRequestDTO billRequestDTO = new BillingRequestDTO(product, tp, productPriceList);
+		String json = getBillRequestDTOtoJson(billRequestDTO);
+		String billWithPrice = billing.bill(json);
+		
+		logger.info("Calculate Invoicing (instantBill) to apply Taxes");
+		return billing.billApplyTaxes(billWithPrice);
+	}
 
 	private String getBillRequestDTOtoJson(BillingRequestDTO billRequestDTO) {
 		// product
