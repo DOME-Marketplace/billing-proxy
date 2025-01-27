@@ -1,9 +1,5 @@
 package it.eng.dome.billing.proxy.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,13 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
-import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
-import it.eng.dome.tmforum.tmf678.v4.JSON;
-import it.eng.dome.tmforum.tmf678.v4.model.AppliedCustomerBillingRate;
 import it.eng.dome.billing.proxy.service.BillingProxyService;
 
 
@@ -64,7 +55,7 @@ public class BillingController {
 	public String calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
 		logger.info("Received request to calculate the bill");
 		
-		String json = getBillRequestDTOtoJson(billRequestDTO);
+		String json = billRequestDTO.toJson();
 		
 		// Gets the AppliedCustomerBillingRate list invoking the billing-engine
 		String billsWithPrice = billing.bill(json);
@@ -149,40 +140,7 @@ public class BillingController {
 		}
 	}
 
-	private String getBillRequestDTOtoJson(BillingRequestDTO billRequestDTO) {
-		// product
-		String productJson = billRequestDTO.getProduct().toJson();
-		
-		// timePeriod
-		String timePeriodJson = billRequestDTO.getTimePeriod().toJson();
-		
-		// productPriceListJson
-		StringBuilder productPriceListJson = new StringBuilder("[");
-		for (int i = 0; i < billRequestDTO.getProductPrice().size(); i++) {
-            if (i > 0) {
-            	productPriceListJson.append(", ");
-            }
-            productPriceListJson.append(billRequestDTO.getProductPrice().get(i).toJson());
-        }
-		productPriceListJson.append("]");
-		
-		return "{ \"product\": " + capitalizeStatus(productJson) + ", \"timePeriod\": "+ timePeriodJson + ", \"productPrice\": "+ productPriceListJson +"}";
-	} 
-	
-	private String capitalizeStatus(String json) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String capitalize = json;
-		 try {
-			ObjectNode jsonNode = (ObjectNode) objectMapper.readTree(json);
-			 String status = jsonNode.get("status").asText();
-			 jsonNode.put("status", status.toUpperCase());
-			 return objectMapper.writeValueAsString(jsonNode);
 
-		} catch (Exception e) {			
-			return capitalize;
-		}
-	}
-	
 	/*
 	 * TODO
 	 * Method to get the ApplyTaxesRequestDTO as a json string

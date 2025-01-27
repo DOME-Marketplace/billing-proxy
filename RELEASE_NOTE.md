@@ -4,7 +4,10 @@
 
 ### <code>0.0.4</code> :calendar: 27/01/2025
 **Feature**
-* Added **proxy** functionalities: **bill** - `billing/bill` - **bill for a specific date** - `billing/billForDate` -  ** instant bill** - `billing/instantBill`
+* Added **proxy** functionalities: **bill** - `billing/bill` - **bill for a specific date** - `billing/billForDate` -  ** instant bill** - `billing/instantBill`.
+
+**Improvements**
+* Usage of **BILLING_PREFIX** to add prefix for **Swagger APIs**. Use `/billing-engine` prefix in Kubernetes if you use Ingress to separate the billing services. 
 
 ### <code>0.0.3</code> :calendar: 20/01/2025
 **Feature**
