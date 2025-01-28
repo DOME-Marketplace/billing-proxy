@@ -13,20 +13,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import it.eng.dome.billing.proxy.service.BillingProxyService;
+import it.eng.dome.billing.proxy.service.BillingService;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
 import it.eng.dome.brokerage.billing.utils.BillingUtils;
-import it.eng.dome.tmforum.tmf620.v4.api.ProductOfferingPriceApi;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPrice;
 import it.eng.dome.tmforum.tmf637.v4.JSON;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
@@ -43,7 +43,8 @@ public class BillingController {
 	@Autowired
 	protected BillingProxyService billing;
 	
-	private ProductOfferingPriceApi productOfferingPrice;
+	@Autowired
+	private BillingService billingService;
 	
 	private final static String PREFIX_KEY = "period-";
 	
@@ -87,10 +88,10 @@ public class BillingController {
 		// Gets the AppliedCustomerBillingRate list with taxes invoking the invoicing-service
 		//1) Get ApplyTaxesRequestDTO as a json string
 		logger.info("Get ApplyTaxesRequestDTO from bill and product");
-		BillingRequestDTO brDTO = JSON.deserialize(toLowerCaseStatus(billRequestDTO), BillingRequestDTO.class);
+		BillingRequestDTO brDTO = JSON.deserialize(toLowerCaseStatus(billRequestDTO, "/product"), BillingRequestDTO.class);
 		
 		Product product = brDTO.getProduct();
-		String productJson=JSON.getGson().toJson(product);	
+		String productJson = JSON.getGson().toJson(product);	
         String appyTaxesRequestJsonStr = getApplyTaxesRequestDTOtoJson(billsWithPrice, productJson);	
         
         //2) Invoke the invoicing-service
@@ -108,7 +109,7 @@ public class BillingController {
 	 * @throws Throwable If an error occurs during the calculation of the bill for the Product
 	 */
 	@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculateBill(@RequestBody Product product) throws Throwable {
+	public String calculateInstantBill(@RequestBody String product) throws Throwable {
 		
 		try {
 			Assert.state(product!=null, "Cannot calculate bill for empty Product!");
@@ -116,7 +117,7 @@ public class BillingController {
 			logger.info("Received request for calculate a bill now - instant bill");
 			
 			// Get current Date
-			OffsetDateTime now=OffsetDateTime.now();
+			OffsetDateTime now = OffsetDateTime.now();
 			logger.info("Starting calculate instant bill at {}", now.format(formatter));
 			
 			// Invoke method to calculate the bills for data now
@@ -165,29 +166,31 @@ public class BillingController {
 		}
 	}*/
 	
-	private String calculateBillNow(Product product) throws Throwable {
+	private String calculateBillNow(String prod) throws Throwable {
 		try {
-			Assert.state(product!=null, "Cannot calculate bill for empty Product!");
+			Assert.state(prod!=null, "Cannot calculate bill for empty Product!");
 			
 			logger.info("Received request for calculate a bill now");
 				
 			// Identify the groups of ProcutPrices and TimePeriod for which the bills must be calculated (i.e., created one or more BillingRequestDTO that will be put in input to the "billing/bill" API)
-			List<BillingRequestDTO> productPricesAntTimePeriodGroups=getProductPricesAntTimePeriodGroupsForNow(product);
+			Product product = JSON.deserialize(toLowerCaseStatus(prod, ""), Product.class);
+			List<BillingRequestDTO> productPricesAntTimePeriodGroups = getProductPricesAntTimePeriodGroupsForNow(product);
 			
-			Assert.state(!CollectionUtils.isEmpty(productPricesAntTimePeriodGroups), "Cannot calculate bills for a product without ProductPrices that must be billed in the specified date!");
+			//Assert.state(!CollectionUtils.isEmpty(productPricesAntTimePeriodGroups), "Cannot calculate bills for a product without ProductPrices that must be billed in the specified date!");
 			StringBuilder appliedCustomerBillingRateJsonList = new StringBuilder("[");
 			int i=0;
 			
 			for(BillingRequestDTO dto: productPricesAntTimePeriodGroups) {
-				String appliedCustomerBillingRateListTemp=calculateBill(dto.toJson());
+				String appliedCustomerBillingRateListTemp = calculateBill(dto.toJson());
 				if (i > 0) {
 					appliedCustomerBillingRateJsonList.append(", ");
 				}
-				i++;
+				i++;			
 				appliedCustomerBillingRateJsonList.append(cleanup(appliedCustomerBillingRateListTemp));
 			}
 			appliedCustomerBillingRateJsonList.append("]");
-			logger.info("AppliedCustomerBillingRateList: "+appliedCustomerBillingRateJsonList.toString());
+			
+			logger.info("AppliedCustomerBillingRateList: {}", appliedCustomerBillingRateJsonList.toString());
 
 			return appliedCustomerBillingRateJsonList.toString();
 		} catch (Exception e) {
@@ -197,8 +200,18 @@ public class BillingController {
 		}
 	}
 	
+	//Remove [ and ] parenthesis from string (array)
 	private String cleanup(String str) {
-		return str.replaceFirst("[", "").replace("]", "");
+		ObjectMapper objectMapper = new ObjectMapper();
+        
+		try {
+			List<Map<String, Object>> list = objectMapper.readValue(str, new TypeReference<List<Map<String, Object>>>() {});
+	        String result = objectMapper.writeValueAsString(list).replaceAll("^\\[|\\]$", "");
+	        return result;
+		} catch (Exception e) {
+			logger.error("Cannot remove parenthesis [ and ] {}", e.getMessage());
+		} 
+		return str;
 	}
 
 
@@ -210,7 +223,6 @@ public class BillingController {
 	 * @return The ApplyTaxesRequestDTO  represented as a JSON string
 	 */
 	private String getApplyTaxesRequestDTOtoJson(String appliedCustomerBillingRateListJson, String productJson) {
-		logger.info("Get ApplyTaxesRequestDTOtoJson");
 		return "{ \"product\": " + capitalizeStatus(productJson) + ", \"appliedCustomerBillingRate\": " + appliedCustomerBillingRateListJson + "}";
 	}
 	 /*
@@ -235,7 +247,7 @@ public class BillingController {
 			for (ProductPrice pprice : pprices) {
 
 				//1) Get ProductOfferingPrice
-				ProductOfferingPrice pop = productOfferingPrice.retrieveProductOfferingPrice(pprice.getProductOfferingPrice().getId(), null);
+				ProductOfferingPrice pop = billingService.getProductOfferingPrice(pprice.getProductOfferingPrice().getId());
 				Assert.state(!Objects.isNull(pop), "The ProductOfferingPrice reference is missing in the ProductPrice " + pprice.getName());
 				
 				if("one-time".equals(pop.getPriceType().toLowerCase())) {
@@ -279,15 +291,12 @@ public class BillingController {
 				TimePeriod tp = timePeriods.get(key).get(0);
 
 				if (!timePeriods.get(key).isEmpty()) {
-					logger.debug("TimePeriodo - startDate: " + tp.getStartDateTime() + " - endDate: " + tp.getEndDateTime());
+					logger.debug("TimePeriod - startDate: " + tp.getStartDateTime() + " - endDate: " + tp.getEndDateTime());
 					List<ProductPrice> pps = entry.getValue();
-					for (ProductPrice pp : pps) {
-						logger.debug(pp.getName() + " || " + pp.getPriceType());
-					}
 					
 					//Create the BillingRequestDTO for the group
-					BillingRequestDTO brDTO=new BillingRequestDTO(product,tp,pps);
-					logger.info(brDTO.toJson());
+					BillingRequestDTO brDTO = new BillingRequestDTO(product, tp, pps);
+					logger.info("BillingRequestDTO: {}", brDTO.toJson());
 					// Add the BillingRequestDTO to the lists of BillingRequestDTO
 					brDTOList.add(brDTO);
 				}
@@ -320,15 +329,15 @@ public class BillingController {
 	}
 	
 	//TODO workaround to set the status value in lowercase
-	private String toLowerCaseStatus(String json) {
+	private String toLowerCaseStatus(String json, String path) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String lower = json;
 		try {
 			ObjectNode rootNode = (ObjectNode) objectMapper.readTree(json);
-			JsonNode statusNode = rootNode.at("/product/status");
+			JsonNode statusNode = rootNode.at(path + "/status");
 			if (!statusNode.isMissingNode()) {
 				String status = statusNode.asText();
-				((ObjectNode) rootNode.at("/product")).put("status", status.toLowerCase());
+				((ObjectNode) rootNode.at(path)).put("status", status.toLowerCase());
 			}
 			return objectMapper.writeValueAsString(rootNode);
 
