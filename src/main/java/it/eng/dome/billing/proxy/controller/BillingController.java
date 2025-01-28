@@ -233,10 +233,10 @@ public class BillingController {
 	  * @param product The Product that must be billed
 	  * @return A list of BillingRequestDTO 
 	  */
-	private List<BillingRequestDTO> getProductPricesAntTimePeriodGroupsForNow(Product product) throws Throwable{
+	private List<BillingRequestDTO> getProductPricesAntTimePeriodGroupsForNow(Product product) throws Throwable {
 		try {
 
-			List<BillingRequestDTO> brDTOList=new ArrayList<BillingRequestDTO>();
+			List<BillingRequestDTO> brDTOList = new ArrayList<BillingRequestDTO>();
 			
 			List<ProductPrice> pprices = product.getProductPrice();
 			logger.debug("Number of ProductPrices found: {} ", pprices.size());
@@ -308,8 +308,7 @@ public class BillingController {
 			return brDTOList;
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error: {}", e.getMessage());
 			return null;
 		}
 		
