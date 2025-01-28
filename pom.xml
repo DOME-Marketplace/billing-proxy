@@ -56,11 +56,7 @@
 		<dependency>
 			<groupId>it.eng.dome.brokerage</groupId>
 			<artifactId>brokerage-utils</artifactId>
-<<<<<<< HEAD
-			<version>0.0.2</version>
-=======
 			<version>[0.0, 1.0)</version>
->>>>>>> billing-proxy-instantBill
 		</dependency>
 		
 		<!-- Spring Boot Actuator -->

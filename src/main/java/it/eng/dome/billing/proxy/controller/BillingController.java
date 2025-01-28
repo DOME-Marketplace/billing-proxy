@@ -1,10 +1,6 @@
 package it.eng.dome.billing.proxy.controller;
 
 import java.time.OffsetDateTime;
-<<<<<<< HEAD
-import java.util.ArrayList;
-import java.util.List;
-=======
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
->>>>>>> billing-proxy-instantBill
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-<<<<<<< HEAD
-import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
-import it.eng.dome.tmforum.tmf637.v4.model.Product;
-import it.eng.dome.tmforum.tmf637.v4.model.ProductOfferingPriceRef;
-import it.eng.dome.tmforum.tmf637.v4.model.ProductPrice;
-import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
-=======
 
->>>>>>> billing-proxy-instantBill
 import it.eng.dome.billing.proxy.service.BillingProxyService;
 import it.eng.dome.billing.proxy.service.BillingService;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
@@ -90,10 +77,6 @@ public class BillingController {
      * @throws Throwable If an error occurs during the calculation of the bill for the Product
      */
 	@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-<<<<<<< HEAD
-	public String calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
-		logger.info("Received billingRequestDTO to calculate the bill");
-=======
 	public String calculateBill(@RequestBody String billRequestDTO) throws Throwable {
 		logger.info("Received request to calculate the bill");
 	
@@ -101,7 +84,6 @@ public class BillingController {
 		String billsWithPrice = billing.bill(billRequestDTO);		
 		logger.debug("Billing payload with price:\n" + billsWithPrice);
 
->>>>>>> billing-proxy-instantBill
 		
 		// Gets the AppliedCustomerBillingRate list with taxes invoking the invoicing-service
 		//1) Get ApplyTaxesRequestDTO as a json string
@@ -116,32 +98,7 @@ public class BillingController {
         logger.info("Calculate Invoicing (bill) to apply Taxes");        
 		return billing.billApplyTaxes(appyTaxesRequestJsonStr);
 	}
-
 	
-	@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculateInstantBill(@RequestBody Product product) throws Throwable {
-		logger.info("Received product request to calculate the instantBill");
-		
-		OffsetDateTime now = OffsetDateTime.now();
-		TimePeriod tp = new TimePeriod().startDateTime(now).endDateTime(now);	
-		String productId = product.getId();
-		//TODO come recuperare il ProductPrice
-		ArrayList<ProductPrice> productPriceList = new ArrayList<ProductPrice>();
-		
-		ProductPrice pp = new ProductPrice();
-		ProductOfferingPriceRef popr = new ProductOfferingPriceRef();
-		popr.setId("urn:ngsi-ld:product-offering-price:38b293a6-92db-4ca3-8fe6-54a6e4a9e12c");
-		pp.setPriceType("recurring");
-		pp.setProductOfferingPrice(popr);
-		productPriceList.add(pp);
-
-		BillingRequestDTO billRequestDTO = new BillingRequestDTO(product, tp, productPriceList);
-		String json = getBillRequestDTOtoJson(billRequestDTO);
-		String billWithPrice = billing.bill(json);
-		
-		logger.info("Calculate Invoicing (instantBill) to apply Taxes");
-		return billing.billApplyTaxes(billWithPrice);
-	}
 
 	/**
 	 * The POST /billing/instantBill REST API is invoked to calculate the bill of a Product (TMF637-v4) with taxes considering as startdate now.\n
