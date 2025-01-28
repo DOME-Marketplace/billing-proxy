@@ -43,7 +43,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>   
+		</dependency> 
+		  
+		<!-- TMF620 Catalog -->
+		<dependency>
+			<groupId>it.eng.dome.tmforum-sdk</groupId>
+			<artifactId>tmf620-v4</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		
 		<!-- Brokerage Utils dependencies -->
 		<dependency>
