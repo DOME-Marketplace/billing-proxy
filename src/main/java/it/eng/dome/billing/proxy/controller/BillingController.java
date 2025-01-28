@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.billing.proxy.service.BillingProxyService;
 
@@ -56,21 +60,22 @@ public class BillingController {
 		logger.info("Received request to calculate the bill");
 		
 		String json = billRequestDTO.toJson();
-		
+	
 		// Gets the AppliedCustomerBillingRate list invoking the billing-engine
-		String billsWithPrice = billing.bill(json);
-		
-		logger.info("Calculate Invoicing (bill) to apply Taxes");
-		
-		Product product=billRequestDTO.getProduct();
-		String productJson=product.toJson();
+		String billsWithPrice = billing.bill(json);		
+		logger.debug("Billing payload with price:\n" + billsWithPrice);
+
 		
 		// Gets the AppliedCustomerBillingRate list with taxes invoking the invoicing-service
 		//1) Get ApplyTaxesRequestDTO as a json string
-        String appyTaxesRequestJsonStr=getApplyTaxesRequestDTOtoJson(billsWithPrice,productJson);	
+		logger.info("Get ApplyTaxesRequestDTO from bill and product");
+		Product product = billRequestDTO.getProduct();
+		String productJson = product.toJson();		
+        String appyTaxesRequestJsonStr = getApplyTaxesRequestDTOtoJson(billsWithPrice, productJson);	
+        
         
         //2) Invoke the invoicing-service
-		
+        logger.info("Calculate Invoicing (bill) to apply Taxes");        
 		return billing.billApplyTaxes(appyTaxesRequestJsonStr);
 	}
 	
@@ -142,7 +147,6 @@ public class BillingController {
 
 
 	/*
-	 * TODO
 	 * Method to get the ApplyTaxesRequestDTO as a json string
 	 * 
 	 * @param appliedCustomerBillingRateListJson The AppliedCustomerBillingRate list represented as a JSON string
@@ -150,8 +154,8 @@ public class BillingController {
 	 * @return The ApplyTaxesRequestDTO  represented as a JSON string
 	 */
 	private String getApplyTaxesRequestDTOtoJson(String appliedCustomerBillingRateListJson, String productJson) {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info("Get ApplyTaxesRequestDTOtoJson");
+		return "{ \"product\": " + capitalizeStatus(productJson) + ", \"appliedCustomerBillingRate\": " + appliedCustomerBillingRateListJson + "}";
 	}
 	 /*
 	  * Utility method used to identify for a specific Product and Date the groups of ProductPrices and TimePeriod that must be considered to make a bill.
@@ -165,5 +169,20 @@ public class BillingController {
 	private List<BillingRequestDTO> getProductPricesAntTimePeriodGroups(Product product, Date date) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	// Bugfix: ProductStatusType must be uppercase
+	private String capitalizeStatus(String json) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String capitalize = json;
+		 try {
+			ObjectNode jsonNode = (ObjectNode) objectMapper.readTree(json);
+			 String status = jsonNode.get("status").asText();
+			 jsonNode.put("status", status.toUpperCase());
+			 return objectMapper.writeValueAsString(jsonNode);
+
+		} catch (Exception e) {			
+			return capitalize;
+		}
 	}
 }
