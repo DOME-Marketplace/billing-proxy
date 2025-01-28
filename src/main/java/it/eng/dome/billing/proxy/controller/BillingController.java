@@ -250,7 +250,7 @@ public class BillingController {
 				ProductOfferingPrice pop = billingService.getProductOfferingPrice(pprice.getProductOfferingPrice().getId());
 				Assert.state(!Objects.isNull(pop), "The ProductOfferingPrice reference is missing in the ProductPrice " + pprice.getName());
 				
-				if("one-time".equals(pop.getPriceType().toLowerCase())) {
+				if("one-time".equals(pop.getPriceType().toLowerCase())||"one time".equals(pop.getPriceType().toLowerCase())) {
 					logger.info("Calculate ProductPrice list and TimePeriod group for one-time");
 					String keyPeriod = PREFIX_KEY + "one-time";
 					
@@ -269,10 +269,12 @@ public class BillingController {
 					
 					//Get recurringPeriod
 					String recurringPeriod=pop.getRecurringChargePeriodLength()+" "+pop.getRecurringChargePeriodType();
+					keyPeriod=keyPeriod+"-"+pop.getRecurringChargePeriodLength()+"-"+pop.getRecurringChargePeriodType();
 					
 					// Get TimePeriod and ProductPrice for billing
 					TimePeriod tp = new TimePeriod();
-					OffsetDateTime nextBillingTime = BillingUtils.getNextBillingTime(OffsetDateTime.now(), OffsetDateTime.now(), recurringPeriod);
+					OffsetDateTime nextBillingTime = BillingUtils.getNextBillingTime(OffsetDateTime.now(), OffsetDateTime.now().plusDays(1), recurringPeriod);
+
 					tp.setStartDateTime(OffsetDateTime.now());
 					tp.setEndDateTime(nextBillingTime);
 					
@@ -284,7 +286,7 @@ public class BillingController {
 				}
 			}
 			
-			logger.info("Number of item for billing found: {}", productPrices.size());
+			logger.info("Number of item for billing found: {}", productPrices.size()); 
 			for (Map.Entry<String, List<ProductPrice>> entry : productPrices.entrySet()) {
 
 				String key = entry.getKey();
@@ -293,6 +295,7 @@ public class BillingController {
 				if (!timePeriods.get(key).isEmpty()) {
 					logger.debug("TimePeriod - startDate: " + tp.getStartDateTime() + " - endDate: " + tp.getEndDateTime());
 					List<ProductPrice> pps = entry.getValue();
+					logger.debug("Number of ProductPrice in the list: "+pps.size());
 					
 					//Create the BillingRequestDTO for the group
 					BillingRequestDTO brDTO = new BillingRequestDTO(product, tp, pps);
