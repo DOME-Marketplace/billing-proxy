@@ -2,7 +2,6 @@ package it.eng.dome.billing.proxy.controller;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +26,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import it.eng.dome.billing.proxy.service.BillingProxyService;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
 import it.eng.dome.brokerage.billing.utils.BillingUtils;
-import it.eng.dome.tmforum.tmf620.v4.ApiException;
 import it.eng.dome.tmforum.tmf620.v4.api.ProductOfferingPriceApi;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPrice;
 import it.eng.dome.tmforum.tmf637.v4.JSON;
@@ -177,19 +175,30 @@ public class BillingController {
 			List<BillingRequestDTO> productPricesAntTimePeriodGroups=getProductPricesAntTimePeriodGroupsForNow(product);
 			
 			Assert.state(!CollectionUtils.isEmpty(productPricesAntTimePeriodGroups), "Cannot calculate bills for a product without ProductPrices that must be billed in the specified date!");
+			StringBuilder appliedCustomerBillingRateJsonList = new StringBuilder("[");
+			int i=0;
 			
-			String totalAppliedCustomerBillingRateJsonList=new String();
 			for(BillingRequestDTO dto: productPricesAntTimePeriodGroups) {
-				String appliedCustomerBillingRateJsonList=calculateBill(dto.toJson());
-				totalAppliedCustomerBillingRateJsonList.concat(appliedCustomerBillingRateJsonList);
+				String appliedCustomerBillingRateListTemp=calculateBill(dto.toJson());
+				if (i > 0) {
+					appliedCustomerBillingRateJsonList.append(", ");
+				}
+				i++;
+				appliedCustomerBillingRateJsonList.append(cleanup(appliedCustomerBillingRateListTemp));
 			}
+			appliedCustomerBillingRateJsonList.append("]");
+			logger.info("AppliedCustomerBillingRateList: "+appliedCustomerBillingRateJsonList.toString());
 
-			return totalAppliedCustomerBillingRateJsonList;
+			return appliedCustomerBillingRateJsonList.toString();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			// Java exception is converted into HTTP status code by the ControllerExceptionHandler
 			throw new Exception(e); //throw (e.getCause() != null) ? e.getCause() : e;
 		}
+	}
+	
+	private String cleanup(String str) {
+		return str.replaceFirst("[", "").replace("]", "");
 	}
 
 
@@ -215,6 +224,8 @@ public class BillingController {
 	private List<BillingRequestDTO> getProductPricesAntTimePeriodGroupsForNow(Product product) throws Throwable{
 		try {
 
+			List<BillingRequestDTO> brDTOList=new ArrayList<BillingRequestDTO>();
+			
 			List<ProductPrice> pprices = product.getProductPrice();
 			logger.debug("Number of ProductPrices found: {} ", pprices.size());
 
@@ -259,13 +270,37 @@ public class BillingController {
 				}else {
 					logger.info("No calculate ProductPrice list and TimePeriod group for {}",pop.getPriceType());
 				}
-
 			}
+			
+			logger.info("Number of item for billing found: {}", productPrices.size());
+			for (Map.Entry<String, List<ProductPrice>> entry : productPrices.entrySet()) {
+
+				String key = entry.getKey();
+				TimePeriod tp = timePeriods.get(key).get(0);
+
+				if (!timePeriods.get(key).isEmpty()) {
+					logger.debug("TimePeriodo - startDate: " + tp.getStartDateTime() + " - endDate: " + tp.getEndDateTime());
+					List<ProductPrice> pps = entry.getValue();
+					for (ProductPrice pp : pps) {
+						logger.debug(pp.getName() + " || " + pp.getPriceType());
+					}
+					
+					//Create the BillingRequestDTO for the group
+					BillingRequestDTO brDTO=new BillingRequestDTO(product,tp,pps);
+					logger.info(brDTO.toJson());
+					// Add the BillingRequestDTO to the lists of BillingRequestDTO
+					brDTOList.add(brDTO);
+				}
+			}
+			
+			return brDTOList;
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-		return null;
+		
 	}
 
 	
