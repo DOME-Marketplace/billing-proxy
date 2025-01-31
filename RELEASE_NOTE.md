@@ -2,6 +2,11 @@
 
 **Release Notes** of the *Billing Scheduler* software:
 
+### <code>0.0.5</code> :calendar: 31/01/2025
+**Improvements**
+* Refactoring of `InfoProxyController` and add `DateUtils` dependency.
+
+
 ### <code>0.0.4</code> :calendar: 27/01/2025
 **Feature**
 * Added **proxy** functionalities: **bill** - `billing/bill` - **bill for a specific date** - `billing/billForDate` -  ** instant bill** - `billing/instantBill`.

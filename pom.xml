@@ -44,19 +44,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency> 
-		  
-		<!-- TMF620 Catalog -->
-		<dependency>
-			<groupId>it.eng.dome.tmforum-sdk</groupId>
-			<artifactId>tmf620-v4</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+
 		
 		<!-- Brokerage Utils dependencies -->
 		<dependency>
 			<groupId>it.eng.dome.brokerage</groupId>
 			<artifactId>brokerage-utils</artifactId>
 			<version>[0.0, 1.0)</version>
+		</dependency>
+		  
+		<!-- TMF620 Catalog -->
+		<dependency>
+			<groupId>it.eng.dome.tmforum-sdk</groupId>
+			<artifactId>tmf620-v4</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		
 		<!-- Spring Boot Actuator -->
