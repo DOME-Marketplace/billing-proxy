@@ -1,0 +1,20 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:48fa3f34-8560-4461-b47e-8de79b6496b0",
+    "href": "urn:ngsi-ld:product-offering-price:48fa3f34-8560-4461-b47e-8de79b6496b0",
+    "description": "Six months 30% special price",
+    "isBundle": false,
+    "lastUpdate": "2025-02-11T13:36:32.311171635Z",
+    "lifecycleStatus": "Active",
+    "name": "Six months 30% special price",
+    "percentage": 50.0,
+    "priceType": "discount",
+    "version": "1.0",
+    "productOfferingTerm": [
+        {
+            "duration": {
+                "amount": 6,
+                "units": "month"
+            }
+        }
+    ]
+}

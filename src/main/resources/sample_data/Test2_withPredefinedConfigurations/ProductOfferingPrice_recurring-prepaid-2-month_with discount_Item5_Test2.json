@@ -1,0 +1,41 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:f6d5327e-5fc5-432a-9b3e-cf459c27b8b6",
+    "href": "urn:ngsi-ld:product-offering-price:f6d5327e-5fc5-432a-9b3e-cf459c27b8b6",
+    "description": "8CPU, 32GB RAM, 40GB HD: 30 eu per m, recurring prepaid",
+    "isBundle": false,
+    "lastUpdate": "2025-02-11T14:16:26.976324846Z",
+    "lifecycleStatus": "Active",
+    "name": "Alessio Price LARGE",
+    "priceType": "recurring-prepaid",
+    "recurringChargePeriodLength": 2,
+    "recurringChargePeriodType": "month",
+    "version": "1.0",
+    "popRelationship": [
+        {
+            "id": "urn:ngsi-ld:product-offering-price:48fa3f34-8560-4461-b47e-8de79b6496b0",
+            "href": "http://localhost:8100/tmf-api/productCatalogManagement/v4/productOfferingPrice/urn:ngsi-ld:product-offering-price:48fa3f34-8560-4461-b47e-8de79b6496b0",
+            "name": "Six months 30% special price",
+            "relationshipType": "discount"
+        }
+    ],
+    "price": {
+        "unit": "EUR",
+        "value": 30.0
+    },
+    "prodSpecCharValueUse": [
+        {
+            "name": "CPU",
+            "valueType": "number",
+            "productSpecCharacteristicValue": [
+                {
+                    "isDefault": true,
+                    "value": 8
+                }
+            ],
+            "productSpecification": {
+                "id": "urn:ngsi-ld:product-specification:cc8764c7-552e-4eec-b798-0693519fd4dd",
+                "href": "http://localhost:8100/tmf-api/productCatalogManagement/v4/productSpecification/urn:ngsi-ld:product-specification:cc8764c7-552e-4eec-b798-0693519fd4dd"
+            }
+        }
+    ]
+}

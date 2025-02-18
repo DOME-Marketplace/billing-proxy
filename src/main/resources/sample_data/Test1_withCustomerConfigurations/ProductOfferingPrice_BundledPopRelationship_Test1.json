@@ -1,0 +1,80 @@
+[
+	{
+	    "id": "urn:ngsi-ld:product-offering-price:872a326b-f2ed-4190-8215-54b9b7edba60",
+	    "href": "urn:ngsi-ld:product-offering-price:872a326b-f2ed-4190-8215-54b9b7edba60",
+	    "description": "",
+	    "lastUpdate": "2025-02-13T11:09:28.205744513Z",
+	    "lifecycleStatus": "Active",
+	    "name": "Initial",
+	    "priceType": "one time",
+	    "price": {
+	        "unit": "EUR",
+	        "value": 100.0
+	    },
+	    "validFor": {
+	        "startDateTime": "2025-01-31T13:22:55.517Z"
+	    }
+	},
+	
+	{
+	    "id": "urn:ngsi-ld:product-offering-price:de40291d-ce5f-4e1c-827d-eee1927a07c0",
+	    "href": "urn:ngsi-ld:product-offering-price:de40291d-ce5f-4e1c-827d-eee1927a07c0",
+	    "description": "",
+	    "lastUpdate": "2025-02-13T11:11:20.570300940Z",
+	    "lifecycleStatus": "Active",
+	    "name": "rec1",
+	    "priceType": "recurring",
+	    "recurringChargePeriodLength": 1,
+	    "recurringChargePeriodType": "month",
+	    "price": {
+	        "unit": "EUR",
+	        "value": 5.0
+	    },
+	    "prodSpecCharValueUse": [
+	        {
+	            "id": "urn:ngsi-ld:characteristic:7e255099-897a-4713-9d8e-e8ef40d1c5fc",
+	            "name": "Cores",
+	            "productSpecCharacteristicValue": [
+	                {
+	                    "unitOfMeasure": "cores",
+	                    "value": 5
+	                }
+	            ]
+	        }
+	    ],
+	    "validFor": {
+	        "startDateTime": "2025-01-31T13:22:55.654Z"
+	    }
+	},
+	
+	{
+	    "id": "urn:ngsi-ld:product-offering-price:f3ee6946-0a80-4153-822d-3c4382ab41d9",
+	    "href": "urn:ngsi-ld:product-offering-price:f3ee6946-0a80-4153-822d-3c4382ab41d9",
+	    "description": "",
+	    "lastUpdate": "2025-02-13T11:16:02.297418663Z",
+	    "lifecycleStatus": "Active",
+	    "name": "rec 2",
+	    "priceType": "recurring",
+	    "recurringChargePeriodLength": 1,
+	    "recurringChargePeriodType": "month",
+	    "price": {
+	        "unit": "EUR",
+	        "value": 10.0
+	    },
+	    "prodSpecCharValueUse": [
+	        {
+	            "id": "urn:ngsi-ld:characteristic:7e255099-897a-4713-9d8e-e8ef40d1c5fc",
+	            "name": "Cores",
+	            "productSpecCharacteristicValue": [
+	                {
+	                    "unitOfMeasure": "cores",
+	                    "value": 10
+	                }
+	            ]
+	        }
+	    ],
+	    "validFor": {
+	        "startDateTime": "2025-01-31T13:22:55.768Z"
+	    }
+	}
+]

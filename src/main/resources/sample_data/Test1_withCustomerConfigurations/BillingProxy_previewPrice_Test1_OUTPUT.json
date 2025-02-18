@@ -1,0 +1,146 @@
+{
+    "id": "8cd86e96-f786-4742-9e0a-36b241f92db4",
+    "agreement": [],
+    "channel": [],
+    "note": [],
+    "orderTotalPrice": [
+        {
+            "priceType": "recurring",
+            "recurringChargePeriod": "1 month",
+            "price": {
+                "taxRate": 0.21,
+                "dutyFreeAmount": {
+                    "unit": "EUR",
+                    "value": 10.0
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 12.1
+                }
+            },
+            "priceAlteration": []
+        },
+        {
+            "priceType": "one-time",
+            "price": {
+                "taxRate": 0.21,
+                "dutyFreeAmount": {
+                    "unit": "EUR",
+                    "value": 100.0
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 121.0
+                }
+            },
+            "priceAlteration": []
+        }
+    ],
+    "payment": [],
+    "productOfferingQualification": [],
+    "productOrderItem": [
+        {
+            "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+            "quantity": 1,
+            "action": "add",
+            "itemPrice": [
+                {
+                    "description": "",
+                    "name": "Initial",
+                    "priceType": "one time",
+                    "price": {
+                        "taxRate": 0.21,
+                        "dutyFreeAmount": {
+                            "unit": "EUR",
+                            "value": 100.0
+                        },
+                        "taxIncludedAmount": {
+                            "unit": "EUR",
+                            "value": 121.0
+                        }
+                    },
+                    "priceAlteration": [],
+                    "productOfferingPrice": {
+                        "id": "urn:ngsi-ld:product-offering-price:872a326b-f2ed-4190-8215-54b9b7edba60",
+                        "name": "Initial"
+                    }
+                },
+                {
+                    "description": "",
+                    "name": "rec 2",
+                    "priceType": "recurring",
+                    "recurringChargePeriod": "1 month",
+                    "price": {
+                        "taxRate": 0.21,
+                        "dutyFreeAmount": {
+                            "unit": "EUR",
+                            "value": 10.0
+                        },
+                        "taxIncludedAmount": {
+                            "unit": "EUR",
+                            "value": 12.1
+                        }
+                    },
+                    "priceAlteration": [],
+                    "productOfferingPrice": {
+                        "id": "urn:ngsi-ld:product-offering-price:f3ee6946-0a80-4153-822d-3c4382ab41d9",
+                        "name": "rec 2"
+                    }
+                }
+            ],
+            "itemTerm": [],
+            "itemTotalPrice": [
+                {
+                    "priceAlteration": [],
+                    "productOfferingPrice": {
+                        "id": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+                        "href": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+                        "name": "Plan with multiple comps"
+                    }
+                }
+            ],
+            "payment": [],
+            "product": {
+                "agreement": [],
+                "place": [],
+                "product": [],
+                "productCharacteristic": [
+                    {
+                        "name": "Cores",
+                        "valueType": "number",
+                        "value": "10"
+                    }
+                ],
+                "productOrderItem": [],
+                "productPrice": [],
+                "productRelationship": [],
+                "productTerm": [],
+                "realizingResource": [],
+                "realizingService": [],
+                "relatedParty": []
+            },
+            "productOffering": {
+                "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+                "href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+            },
+            "productOrderItem": [],
+            "productOrderItemRelationship": [],
+            "qualification": []
+        }
+    ],
+    "quote": [],
+    "relatedParty": [
+        {
+            "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+            "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+            "role": "Customer",
+            "@referredType": "organization"
+        },
+        {
+            "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+            "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+            "role": "Seller",
+            "@referredType": "organization"
+        }
+    ]
+}

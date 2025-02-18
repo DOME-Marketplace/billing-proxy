@@ -1,0 +1,46 @@
+{
+	"id": "8cd86e96-f786-4742-9e0a-36b241f92db4",
+	"productOrderItem": [
+		{
+			"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+			"action": "add",
+			"quantity": "1",
+			"productOffering": {
+				"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+				"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+			},
+			"itemTotalPrice": [
+				{
+					"productOfferingPrice": {
+						"id": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+						"href": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+						"name": "Plan with multiple comps"
+					}
+				}
+			],
+			"product": {
+				"productCharacteristic": [
+					{
+						"name": "Cores",
+						"value": "10",
+						"valueType": "number"
+					}
+				]
+			}
+		}
+	],
+	"relatedParty": [
+		{
+			"id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+			"role": "Customer",
+			"href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+			"@referredType": "organization"
+		},
+		{
+			"id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+			"role": "Seller",
+			"href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+			"@referredType": "organization"
+		}
+	]
+}

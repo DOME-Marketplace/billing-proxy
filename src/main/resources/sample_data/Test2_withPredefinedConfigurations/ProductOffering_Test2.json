@@ -1,0 +1,36 @@
+{
+	"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+	"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+	"description": "asdad",
+	"isBundle": false,
+	"lastUpdate": "2025-01-31T13:22:56.086294589Z",
+	"lifecycleStatus": "Launched",
+	"name": "Price test",
+	"version": "0.1",
+	"bundledProductOffering": [],
+	"category": [],
+	"place": [],
+	"productOfferingPrice": [
+		{
+			"id": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+			"href": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+			"name": "Plan with multiple comps"
+		}
+	],
+	"productOfferingTerm": [
+		{
+			"description": "",
+			"name": "",
+			"validFor": {}
+		}
+	],
+	"productSpecification": {
+		"id": "urn:ngsi-ld:product-specification:2056d29b-22af-4171-887c-d422b4ab1d53",
+		"href": "urn:ngsi-ld:product-specification:2056d29b-22af-4171-887c-d422b4ab1d53",
+		"name": "product cool",
+		"version": "0.1"
+	},
+	"validFor": {
+		"startDateTime": "2025-01-31T13:22:55.884Z"
+	}
+}
