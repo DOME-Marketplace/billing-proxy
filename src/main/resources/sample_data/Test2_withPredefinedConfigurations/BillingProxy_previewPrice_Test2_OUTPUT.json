@@ -1,12 +1,45 @@
 {
-    "id": "8cd86e96-f786-4742-9e0a-36b241f92db4",
+    "description": "Product Order with items one discounted",
+    "orderDate": "2024-11-12T17:43:15.0766836+01:00",
     "agreement": [],
     "channel": [],
     "note": [],
     "orderTotalPrice": [
         {
-            "priceType": "recurring",
+            "priceType": "recurring-prepaid",
+            "recurringChargePeriod": "2 month",
+            "price": {
+                "taxRate": 0.21,
+                "dutyFreeAmount": {
+                    "unit": "EUR",
+                    "value": 15.0
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 18.150002
+                }
+            },
+            "priceAlteration": []
+        },
+        {
+            "priceType": "recurring-prepaid",
             "recurringChargePeriod": "1 month",
+            "price": {
+                "taxRate": 0.21,
+                "dutyFreeAmount": {
+                    "unit": "EUR",
+                    "value": 6.8
+                },
+                "taxIncludedAmount": {
+                    "unit": "EUR",
+                    "value": 8.228001
+                }
+            },
+            "priceAlteration": []
+        },
+        {
+            "priceType": "recurring-prepaid",
+            "recurringChargePeriod": "2 weekly",
             "price": {
                 "taxRate": 0.21,
                 "dutyFreeAmount": {
@@ -26,11 +59,11 @@
                 "taxRate": 0.21,
                 "dutyFreeAmount": {
                     "unit": "EUR",
-                    "value": 100.0
+                    "value": 200.0
                 },
                 "taxIncludedAmount": {
                     "unit": "EUR",
-                    "value": 121.0
+                    "value": 242.0
                 }
             },
             "priceAlteration": []
@@ -40,10 +73,12 @@
     "productOfferingQualification": [],
     "productOrderItem": [
         {
-            "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
-            "quantity": 1,
+            "id": "item1-one-time",
+            "quantity": 2,
             "action": "add",
-            "itemPrice": [
+            "itemPrice": [],
+            "itemTerm": [],
+            "itemTotalPrice": [
                 {
                     "description": "",
                     "name": "Initial",
@@ -52,24 +87,37 @@
                         "taxRate": 0.21,
                         "dutyFreeAmount": {
                             "unit": "EUR",
-                            "value": 100.0
+                            "value": 200.0
                         },
                         "taxIncludedAmount": {
                             "unit": "EUR",
-                            "value": 121.0
+                            "value": 242.0
                         }
                     },
-                    "priceAlteration": [],
-                    "productOfferingPrice": {
-                        "id": "urn:ngsi-ld:product-offering-price:872a326b-f2ed-4190-8215-54b9b7edba60",
-                        "name": "Initial"
-                    }
-                },
+                    "priceAlteration": []
+                }
+            ],
+            "payment": [],
+            "productOffering": {
+                "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+                "href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+            },
+            "productOrderItem": [],
+            "productOrderItemRelationship": [],
+            "qualification": []
+        },
+        {
+            "id": "item2-recurring-prepaid-2-weekly",
+            "quantity": 1,
+            "action": "add",
+            "itemPrice": [],
+            "itemTerm": [],
+            "itemTotalPrice": [
                 {
-                    "description": "",
-                    "name": "rec 2",
-                    "priceType": "recurring",
-                    "recurringChargePeriod": "1 month",
+                    "description": "test billing recurring-prepaid 2 weekly",
+                    "name": "Price test bill",
+                    "priceType": "recurring-prepaid",
+                    "recurringChargePeriod": "2 weekly",
                     "price": {
                         "taxRate": 0.21,
                         "dutyFreeAmount": {
@@ -81,44 +129,134 @@
                             "value": 12.1
                         }
                     },
-                    "priceAlteration": [],
-                    "productOfferingPrice": {
-                        "id": "urn:ngsi-ld:product-offering-price:f3ee6946-0a80-4153-822d-3c4382ab41d9",
-                        "name": "rec 2"
-                    }
-                }
-            ],
-            "itemTerm": [],
-            "itemTotalPrice": [
-                {
-                    "priceAlteration": [],
-                    "productOfferingPrice": {
-                        "id": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
-                        "href": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
-                        "name": "Plan with multiple comps"
-                    }
+                    "priceAlteration": []
                 }
             ],
             "payment": [],
-            "product": {
-                "agreement": [],
-                "place": [],
-                "product": [],
-                "productCharacteristic": [
-                    {
-                        "name": "Cores",
-                        "valueType": "number",
-                        "value": "10"
-                    }
-                ],
-                "productOrderItem": [],
-                "productPrice": [],
-                "productRelationship": [],
-                "productTerm": [],
-                "realizingResource": [],
-                "realizingService": [],
-                "relatedParty": []
+            "productOffering": {
+                "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+                "href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
             },
+            "productOrderItem": [],
+            "productOrderItemRelationship": [],
+            "qualification": []
+        },
+        {
+            "id": "item3-recurring-prepaid-1-month",
+            "quantity": 1,
+            "action": "add",
+            "itemPrice": [],
+            "itemTerm": [],
+            "itemTotalPrice": [
+                {
+                    "description": "32GB RAM Fixed Price: 6 eu per m, recurring prepaid",
+                    "name": "32GB RAM Fixed Price",
+                    "priceType": "recurring-prepaid",
+                    "recurringChargePeriod": "1 month",
+                    "price": {
+                        "taxRate": 0.21,
+                        "dutyFreeAmount": {
+                            "unit": "EUR",
+                            "value": 6.0
+                        },
+                        "taxIncludedAmount": {
+                            "unit": "EUR",
+                            "value": 7.26
+                        }
+                    },
+                    "priceAlteration": []
+                }
+            ],
+            "payment": [],
+            "productOffering": {
+                "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+                "href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+            },
+            "productOrderItem": [],
+            "productOrderItemRelationship": [],
+            "qualification": []
+        },
+        {
+            "id": "item4-recurring-prepaid-1-month 2",
+            "quantity": 2,
+            "action": "add",
+            "itemPrice": [],
+            "itemTerm": [],
+            "itemTotalPrice": [
+                {
+                    "description": "CPU Flexible Price: 0.4 eu per m per CPU, recurring prepaid",
+                    "name": "CPU Flexible Price",
+                    "priceType": "recurring-prepaid",
+                    "recurringChargePeriod": "1 month",
+                    "price": {
+                        "taxRate": 0.21,
+                        "dutyFreeAmount": {
+                            "unit": "EUR",
+                            "value": 0.8
+                        },
+                        "taxIncludedAmount": {
+                            "unit": "EUR",
+                            "value": 0.96800005
+                        }
+                    },
+                    "priceAlteration": []
+                }
+            ],
+            "payment": [],
+            "productOffering": {
+                "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+                "href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+            },
+            "productOrderItem": [],
+            "productOrderItemRelationship": [],
+            "qualification": []
+        },
+        {
+            "id": "item5-recurring-prepaid-2-month 2 with discount",
+            "quantity": 1,
+            "action": "add",
+            "itemPrice": [],
+            "itemTerm": [],
+            "itemTotalPrice": [
+                {
+                    "description": "8CPU, 32GB RAM, 40GB HD: 30 eu per m, recurring prepaid",
+                    "name": "Alessio Price LARGE",
+                    "priceType": "recurring-prepaid",
+                    "recurringChargePeriod": "2 month",
+                    "price": {
+                        "taxRate": 0.21,
+                        "dutyFreeAmount": {
+                            "unit": "EUR",
+                            "value": 30.0
+                        },
+                        "taxIncludedAmount": {
+                            "unit": "EUR",
+                            "value": 36.300003
+                        }
+                    },
+                    "priceAlteration": [
+                        {
+                            "applicationDuration": 6,
+                            "description": "Six months 30% special price",
+                            "name": "Six months 30% special price",
+                            "priceType": "discount",
+                            "unitOfMeasure": "month",
+                            "price": {
+                                "taxRate": 0.21,
+                                "dutyFreeAmount": {
+                                    "unit": "EUR",
+                                    "value": 15.0
+                                },
+                                "taxIncludedAmount": {
+                                    "unit": "EUR",
+                                    "value": 18.150002
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "payment": [],
             "productOffering": {
                 "id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
                 "href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
@@ -131,16 +269,16 @@
     "quote": [],
     "relatedParty": [
         {
-            "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
-            "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
-            "role": "Customer",
+            "id": "urn:ngsi-ld:organization:df55d895-fe24-47fc-9506-39e532279997",
+            "role": "seller",
             "@referredType": "organization"
         },
         {
-            "id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
-            "href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
-            "role": "Seller",
+            "id": "urn:ngsi-ld:organization:df55d895-fe24-47fc-9506-39e532279997",
+            "href": "urn:ngsi-ld:organization:98a67a91-0e05-4dda-af43-253de1e4863d",
+            "role": "buyer",
             "@referredType": "organization"
         }
-    ]
+    ],
+    "state": "inProgress"
 }
