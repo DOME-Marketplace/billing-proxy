@@ -5,6 +5,8 @@
 ### <code>0.0.5</code> :calendar: 05/02/2025
 **Improvements**
 * Refactoring of `InfoProxyController` and add `DateUtils` dependency.
+* Add `StartupListener` listener to log (display) the current version of *Billing Proxy* at startup.
+* Include exception handling with `ControllerExceptionHandler.java` class.
 
 **BugFixing**
 * Set `org.apache.coyote.http11: INFO` to avoid the `Error parsing HTTP request header`.
