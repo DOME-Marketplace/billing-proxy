@@ -1,0 +1,30 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+    "href": "urn:ngsi-ld:product-offering-price:4eef2f83-9b61-486c-ae7f-ba0e68bbcc4d",
+    "description": "this is a plan",
+    "isBundle": true,
+    "lastUpdate": "2025-02-13T11:17:26.310249526Z",
+    "lifecycleStatus": "Active",
+    "name": "Plan with multiple comps",
+    "bundledPopRelationship": [
+        {
+            "id": "urn:ngsi-ld:product-offering-price:872a326b-f2ed-4190-8215-54b9b7edba60",
+            "href": "urn:ngsi-ld:product-offering-price:872a326b-f2ed-4190-8215-54b9b7edba60",
+            "name": "Initial"
+        },
+        {
+            "id": "urn:ngsi-ld:product-offering-price:de40291d-ce5f-4e1c-827d-eee1927a07c0",
+            "href": "urn:ngsi-ld:product-offering-price:de40291d-ce5f-4e1c-827d-eee1927a07c0",
+            "name": "rec1"
+        },
+        {
+            "id": "urn:ngsi-ld:product-offering-price:f3ee6946-0a80-4153-822d-3c4382ab41d9",
+            "href": "urn:ngsi-ld:product-offering-price:f3ee6946-0a80-4153-822d-3c4382ab41d9",
+            "name": "rec 2"
+        }
+    ],
+    "validFor": {
+        "startDateTime": "2025-01-31T13:22:55.890Z"
+    }
+}
+

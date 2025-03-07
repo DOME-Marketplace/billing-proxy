@@ -1,0 +1,34 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:af719973-43c1-4ca9-819f-8b719b6b3426",
+    "href": "urn:ngsi-ld:product-offering-price:af719973-43c1-4ca9-819f-8b719b6b3426",
+    "description": "32GB RAM Fixed Price: 6 eu per m, recurring prepaid",
+    "isBundle": false,
+    "lastUpdate": "2025-02-11T13:42:56.340714712Z",
+    "lifecycleStatus": "Active",
+    "name": "32GB RAM Fixed Price",
+    "priceType": "recurring-prepaid",
+    "recurringChargePeriodLength": 1,
+    "recurringChargePeriodType": "month",
+    "version": "1.0",
+    "price": {
+        "unit": "EUR",
+        "value": 6.0
+    },
+    "prodSpecCharValueUse": [
+        {
+            "name": "RAM",
+            "productSpecCharacteristicValue": [
+                {
+                    "isDefault": true,
+                    "unitOfMeasure": "GB",
+                    "valueType": "number",
+                    "value": 32
+                }
+            ],
+            "productSpecification": {
+                "id": "urn:ngsi-ld:product-specification:cc8764c7-552e-4eec-b798-0693519fd4dd",
+                "href": "http://localhost:8100/tmf-api/productCatalogManagement/v4/productSpecification/urn:ngsi-ld:product-specification:cc8764c7-552e-4eec-b798-0693519fd4dd"
+            }
+        }
+    ]
+}
