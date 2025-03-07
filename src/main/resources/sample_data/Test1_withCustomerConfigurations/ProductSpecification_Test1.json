@@ -1,0 +1,56 @@
+{
+	"id": "urn:ngsi-ld:product-specification:2056d29b-22af-4171-887c-d422b4ab1d53",
+	"href": "urn:ngsi-ld:product-specification:2056d29b-22af-4171-887c-d422b4ab1d53",
+	"brand": "asdad",
+	"description": "",
+	"isBundle": false,
+	"lastUpdate": "2025-01-29T13:30:03.453003050Z",
+	"lifecycleStatus": "Launched",
+	"name": "product cool",
+	"productNumber": "",
+	"version": "0.1",
+	"attachment": [],
+	"productSpecCharacteristic": [
+		{
+			"id": "urn:ngsi-ld:characteristic:7e255099-897a-4713-9d8e-e8ef40d1c5fc",
+			"description": "",
+			"name": "Cores",
+			"productSpecCharacteristicValue": [
+				{
+					"isDefault": true,
+					"unitOfMeasure": "cores",
+					"value": 5
+				},
+				{
+					"isDefault": false,
+					"unitOfMeasure": "cores",
+					"value": 10
+				}
+			]
+		},
+		{
+			"id": "urn:ngsi-ld:characteristic:3d564db7-bbbb-4204-931f-347715b48691",
+			"name": "ISO/IEC 27000:2018",
+			"productSpecCharacteristicValue": [
+				{
+					"isDefault": true,
+					"value": "https://dome-marketplace-sbx.org/charging/media/assets/VATES-B87798617/product_iso27000.pdf"
+				}
+			]
+		}
+	],
+	"productSpecificationRelationship": [],
+	"relatedParty": [
+		{
+			"id": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+			"href": "urn:ngsi-ld:organization:38063c78-fc9f-42ca-a39e-518107a2d403",
+			"role": "Owner",
+			"@referredType": ""
+		}
+	],
+	"resourceSpecification": [],
+	"serviceSpecification": [],
+	"validFor": {
+		"startDateTime": "2024-07-18T11:30:49.301Z"
+	}
+}

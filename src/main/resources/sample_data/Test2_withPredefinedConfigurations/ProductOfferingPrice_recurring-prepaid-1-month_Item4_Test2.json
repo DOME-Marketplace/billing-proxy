@@ -1,0 +1,30 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:fc21c5fd-bcb3-40f7-aede-a7520d05474c",
+    "href": "urn:ngsi-ld:product-offering-price:fc21c5fd-bcb3-40f7-aede-a7520d05474c",
+    "description": "CPU Flexible Price: 0.4 eu per m per CPU, recurring prepaid",
+    "isBundle": false,
+    "lastUpdate": "2025-02-11T14:07:47.599932777Z",
+    "lifecycleStatus": "Active",
+    "name": "CPU Flexible Price",
+    "priceType": "recurring-prepaid",
+    "recurringChargePeriodLength": 1,
+    "recurringChargePeriodType": "month",
+    "version": "1.0",
+    "price": {
+        "unit": "EUR",
+        "value": 0.4
+    },
+    "prodSpecCharValueUse": [
+        {
+            "name": "CPU",
+            "productSpecification": {
+                "id": "urn:ngsi-ld:product-specification:cc8764c7-552e-4eec-b798-0693519fd4dd",
+                "href": "http://localhost:8100/tmf-api/productCatalogManagement/v4/productSpecification/urn:ngsi-ld:product-specification:cc8764c7-552e-4eec-b798-0693519fd4dd"
+            }
+        }
+    ],
+    "unitOfMeasure": {
+        "amount": 1.0,
+        "units": "unit"
+    }
+}

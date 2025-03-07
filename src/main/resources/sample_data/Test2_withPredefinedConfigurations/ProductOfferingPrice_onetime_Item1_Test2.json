@@ -1,0 +1,16 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:b47a90aa-aa03-41ce-8c30-b87c86540e50",
+    "href": "urn:ngsi-ld:product-offering-price:b47a90aa-aa03-41ce-8c30-b87c86540e50",
+    "description": "",
+    "lastUpdate": "2025-02-11T12:53:55.122841374Z",
+    "lifecycleStatus": "active",
+    "name": "Initial",
+    "priceType": "one time",
+    "price": {
+        "unit": "EUR",
+        "value": 100.0
+    },
+    "validFor": {
+        "startDateTime": "2025-01-31T13:22:55.517Z"
+    }
+}

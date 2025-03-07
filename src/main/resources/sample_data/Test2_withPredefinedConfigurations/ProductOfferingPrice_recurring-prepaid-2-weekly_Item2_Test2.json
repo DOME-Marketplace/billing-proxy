@@ -1,0 +1,18 @@
+{
+    "id": "urn:ngsi-ld:product-offering-price:cf454cdc-29a7-4963-b206-e18f9da63a2c",
+    "href": "urn:ngsi-ld:product-offering-price:cf454cdc-29a7-4963-b206-e18f9da63a2c",
+    "description": "test billing recurring-prepaid 2 weekly",
+    "isBundle": false,
+    "lastUpdate": "2025-02-11T13:01:33.989412039Z",
+    "lifecycleStatus": "active",
+    "name": "Price test bill",
+    "priceType": "recurring-prepaid",
+    "recurringChargePeriodLength": 2,
+    "recurringChargePeriodType": "weekly",
+    "version": "1.0",
+    "price": {
+        "unit": "EUR",
+        "value": 10.0
+    },
+    "@type": "ProductOfferingPrice"
+}

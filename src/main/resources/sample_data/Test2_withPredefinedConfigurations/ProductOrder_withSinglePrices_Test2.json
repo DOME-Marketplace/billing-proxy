@@ -1,0 +1,120 @@
+{
+	"description": "Product Order with items one discounted",
+	"orderDate": "2024-11-12T17:43:15.0766836+01:00",
+	"productOrderItem": [
+		{
+			"id": "item1-one-time",
+			"quantity": 2,
+			"action": "add",
+			"itemPrice": [],
+			"itemTotalPrice": [
+				{
+					"description": "item total price one-time",
+					"name": "item total price one-time",
+					"productOfferingPrice": {
+						"id": "urn:ngsi-ld:product-offering-price:b47a90aa-aa03-41ce-8c30-b87c86540e50",
+						"href": "urn:ngsi-ld:product-offering-price:b47a90aa-aa03-41ce-8c30-b87c86540e50"
+					}
+				}
+			],
+			"productOffering": {
+				"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+				"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+			}
+		},
+		{
+			"id": "item2-recurring-prepaid-2-weekly",
+			"quantity": 1,
+			"action": "add",
+			"itemPrice": [],
+			"itemTotalPrice": [
+				{
+					"description": "item total price recurring-prepaid-2-weekly",
+					"name": "item total price recurring-prepaid-2-weekly",
+					"productOfferingPrice": {
+						"id": "urn:ngsi-ld:product-offering-price:cf454cdc-29a7-4963-b206-e18f9da63a2c",
+						"href": "urn:ngsi-ld:product-offering-price:cf454cdc-29a7-4963-b206-e18f9da63a2c"
+					}
+				}
+			],
+			"productOffering": {
+				"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+				"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+			}
+		},
+		{
+			"id": "item3-recurring-prepaid-1-month",
+			"quantity": 1,
+			"action": "add",
+			"itemPrice": [],
+			"itemTotalPrice": [
+				{
+					"description": "item total price recurring-prepaid-1-month",
+					"name": "item total price recurring-prepaid-1-month",
+					"productOfferingPrice": {
+						"id": "urn:ngsi-ld:product-offering-price:af719973-43c1-4ca9-819f-8b719b6b3426",
+						"href": "urn:ngsi-ld:product-offering-price:af719973-43c1-4ca9-819f-8b719b6b3426"
+					}
+				}
+			],
+			"productOffering": {
+				"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+				"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+			}
+		},
+		{
+			"id": "item4-recurring-prepaid-1-month 2",
+			"quantity": 2,
+			"action": "add",
+			"itemPrice": [],
+			"itemTotalPrice": [
+				{
+					"description": "item total price recurring-prepaid-1-month 2",
+					"name": "item total price recurring-prepaid-1-month 2",
+					"productOfferingPrice": {
+						"id": "urn:ngsi-ld:product-offering-price:fc21c5fd-bcb3-40f7-aede-a7520d05474c",
+						"href": "urn:ngsi-ld:product-offering-price:fc21c5fd-bcb3-40f7-aede-a7520d05474c"
+					}
+				}
+			],
+			"productOffering": {
+				"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+				"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+			}
+		},
+		{
+			"id": "item5-recurring-prepaid-2-month 2 with discount",
+			"quantity": 1,
+			"action": "add",
+			"itemPrice": [],
+			"itemTotalPrice": [
+				{
+					"description": "item total price recurring-prepaid-2-month with discount",
+					"name": "item total price recurring-prepaid-2-month with discount",
+					"productOfferingPrice": {
+						"id": "urn:ngsi-ld:product-offering-price:f6d5327e-5fc5-432a-9b3e-cf459c27b8b6",
+						"href": "urn:ngsi-ld:product-offering-price:f6d5327e-5fc5-432a-9b3e-cf459c27b8b6"
+					}
+				}
+			],
+			"productOffering": {
+				"id": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2",
+				"href": "urn:ngsi-ld:product-offering:98778b26-6df7-4a79-9b52-9b20de843fa2"
+			}
+		}
+	],
+	"relatedParty": [
+		{
+			"id": "urn:ngsi-ld:organization:df55d895-fe24-47fc-9506-39e532279997",
+			"role": "seller",
+			"@referredType": "organization"
+		},
+		{
+			"id": "urn:ngsi-ld:organization:df55d895-fe24-47fc-9506-39e532279997",
+			"href": "urn:ngsi-ld:organization:98a67a91-0e05-4dda-af43-253de1e4863d",
+			"role": "buyer",
+			"@referredType": "organization"
+		}
+	],
+	"state": "inProgress"
+}
