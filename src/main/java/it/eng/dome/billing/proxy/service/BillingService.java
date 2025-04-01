@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import it.eng.dome.billing.proxy.tmf.TmfApiFactory;
-import it.eng.dome.tmforum.tmf620.v4.api.ProductOfferingPriceApi;
+import it.eng.dome.brokerage.api.ProductOfferingPriceApis;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPrice;
 
 
@@ -22,19 +22,15 @@ public class BillingService implements InitializingBean {
 	@Autowired
 	private TmfApiFactory tmfApiFactory;
 	
-	private ProductOfferingPriceApi productOfferingPrice;
+	private ProductOfferingPriceApis productOfferingPrice;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		productOfferingPrice = new ProductOfferingPriceApi(tmfApiFactory.getTMF620CatalogApiClient());		
+		productOfferingPrice = new ProductOfferingPriceApis(tmfApiFactory.getTMF620CatalogApiClient());
 	}
 
 	public ProductOfferingPrice getProductOfferingPrice(String id) {
-		try {
-			return productOfferingPrice.retrieveProductOfferingPrice(id, null);
-		} catch (it.eng.dome.tmforum.tmf620.v4.ApiException e) {
-			logger.error(e.getMessage());
-			return null;
-		}
+		logger.info("Get ProductOfferingPrice by Id: {}", id);
+		return productOfferingPrice.getProductOfferingPrice(id, null);
 	}
 }
