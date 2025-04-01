@@ -2,14 +2,18 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
-### <code>0.0.5</code> :calendar: 05/02/2025
+### <code>0.0.6</code> :calendar: XX/03/2025
+**Improvements**
+* Add singleton for ...
+
+### <code>0.0.5</code> :calendar: 05/03/2025
 **Improvements**
 * Refactoring of `InfoProxyController` and add `DateUtils` dependency.
 * Add `StartupListener` listener to log (display) the current version of *Billing Proxy* at startup.
 * Include exception handling with `ControllerExceptionHandler.java` class.
 
 **BugFixing**
-* Set `org.apache.coyote.http11: INFO` to avoid the `Error parsing HTTP request header`.
+* Set `org.apache.coyote.http11: ERROR` to avoid the `Error parsing HTTP request header`.
 * Set pattern console to `%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n`.
 
 
