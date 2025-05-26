@@ -11,6 +11,7 @@
 **Improvements**
 * Usage of `2.0.0` version of `Brokerage Utils`.
 
+
 ### <code>0.0.5</code> :calendar: 05/02/2025
 **Improvements**
 * Refactoring of `InfoProxyController` and add `DateUtils` dependency.
