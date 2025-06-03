@@ -43,7 +43,7 @@ public final class TmfApiFactory implements InitializingBean {
 			apiClient.setBasePath(tmfEndpoint + "/" + tmf620CatalogPath);
 		}else {
 			// use direct access on specific TMForum APIs software
-			apiClient.setBasePath(tmfEndpoint + TMF_ENDPOINT_CONCAT_PATH + "product-catalog" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort);
+			apiClient.setBasePath(tmfEndpoint + TMF_ENDPOINT_CONCAT_PATH + "product-catalog" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort + "/" + tmf620CatalogPath);
 		}		
 		log.debug("Invoke Catalog API at endpoint: " + apiClient.getBasePath());
 		return apiClient;
