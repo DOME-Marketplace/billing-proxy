@@ -2,9 +2,10 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
-### <code>1.2.1</code> :calendar: 09/06/2025 (WIP)
+### <code>1.2.1</code> :calendar: 14/07/2025
 **Improvements**
 * Update of the `basePath` for building TMForum API URLs with or without **envoy** usage.
+* Display `ENV VARs` in the Listener at beginning.
 
 
 ### <code>1.2.0</code> :calendar: 03/06/2025
