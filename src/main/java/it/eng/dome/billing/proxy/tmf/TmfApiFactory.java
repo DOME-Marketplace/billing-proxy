@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import it.eng.dome.brokerage.billing.utils.UrlPathUtils;
+
 @Component(value = "tmfApiFactory")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public final class TmfApiFactory implements InitializingBean {
@@ -38,14 +40,15 @@ public final class TmfApiFactory implements InitializingBean {
 	
 	public it.eng.dome.tmforum.tmf620.v4.ApiClient getTMF620CatalogApiClient() {
 		final it.eng.dome.tmforum.tmf620.v4.ApiClient apiClient = it.eng.dome.tmforum.tmf620.v4.Configuration.getDefaultApiClient();
-		if (tmfEnvoy) {
-			// usage of envoyProxy to access on TMForum APIs
-			apiClient.setBasePath(tmfEndpoint + "/" + tmf620CatalogPath);
-		}else {
-			// use direct access on specific TMForum APIs software
-			apiClient.setBasePath(tmfEndpoint + TMF_ENDPOINT_CONCAT_PATH + "product-catalog" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort);
-		}		
+		
+		String basePath = tmfEndpoint;
+		if (!tmfEnvoy) { // no envoy specific path
+			basePath += TMF_ENDPOINT_CONCAT_PATH + "product-catalog" + "." + tmfNamespace + "." + tmfPostfix + ":" + tmfPort;
+		}
+		
+		apiClient.setBasePath(basePath + "/" + tmf620CatalogPath);
 		log.debug("Invoke Catalog API at endpoint: " + apiClient.getBasePath());
+		
 		return apiClient;
 	}
 
@@ -63,29 +66,13 @@ public final class TmfApiFactory implements InitializingBean {
 		Assert.state(!StringUtils.isBlank(tmf620CatalogPath), "Billing Scheduler not properly configured. The tmf620_catalog_path property has no value.");
 		
 		if (tmfEndpoint.endsWith("/")) {
-			tmfEndpoint = removeFinalSlash(tmfEndpoint);		
+			tmfEndpoint = UrlPathUtils.removeFinalSlash(tmfEndpoint);		
 		}
 		
 		if (tmf620CatalogPath.startsWith("/")) {
-			tmf620CatalogPath = removeInitialSlash(tmf620CatalogPath);
+			tmf620CatalogPath = UrlPathUtils.removeInitialSlash(tmf620CatalogPath);
 		}
 		
 	}
-	
-	private String removeFinalSlash(String s) {
-		String path = s;
-		while (path.endsWith("/"))
-			path = path.substring(0, path.length() - 1);
-
-		return path;
-	}
-	
-	private String removeInitialSlash(String s) {
-		String path = s;
-		while (path.startsWith("/")) {
-			path = path.substring(1);
-		}				
-		return path;
-	}	
 
 }

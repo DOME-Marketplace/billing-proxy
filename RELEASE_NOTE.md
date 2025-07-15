@@ -2,18 +2,31 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
-### <code>0.0.6</code> :calendar: XX/03/2025
+### <code>1.2.1</code> :calendar: 15/07/2025
 **Improvements**
-* Add singleton for ...
+* Update of the `basePath` for building TMForum API URLs with or without **envoy** usage.
+* Display `ENV VARs` in the Listener at beginning.
 
-### <code>0.0.5</code> :calendar: 05/03/2025
+
+### <code>1.2.0</code> :calendar: 03/06/2025
+**Improvements**
+* Set of `[2.1.0, 2.2.0)` version of `Brokerage Utils`.
+* Update paths for TMForum internal services.
+
+
+### <code>0.1.0</code> :calendar: 31/03/2025
+**Improvements**
+* Usage of `2.0.0` version of `Brokerage Utils`.
+
+
+### <code>0.0.5</code> :calendar: 05/02/2025
 **Improvements**
 * Refactoring of `InfoProxyController` and add `DateUtils` dependency.
 * Add `StartupListener` listener to log (display) the current version of *Billing Proxy* at startup.
 * Include exception handling with `ControllerExceptionHandler.java` class.
 
 **BugFixing**
-* Set `org.apache.coyote.http11: ERROR` to avoid the `Error parsing HTTP request header`.
+* Set `org.apache.coyote.http11: INFO` to avoid the `Error parsing HTTP request header`.
 * Set pattern console to `%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n`.
 
 
