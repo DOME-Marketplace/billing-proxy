@@ -27,12 +27,12 @@ public class BillingProxyService implements IProxyService {
 	
 
 
-	public String billingPreviewPrice(String order) {
+	public String billingPreviewPrice(String billingPreviewRequestDTO) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<String> request = new HttpEntity<>(order, headers);
+		HttpEntity<String> request = new HttpEntity<>(billingPreviewRequestDTO, headers);
 		
-		logger.debug("Payload billing preview price received:\n" + order);
+		logger.debug("Payload billing preview price received:\n" + billingPreviewRequestDTO);
 		ResponseEntity<String> response = restTemplate.postForEntity(billinEngine + "/billing/previewPrice", request, String.class);
 			
 		if (response != null && response.getBody() != null) {

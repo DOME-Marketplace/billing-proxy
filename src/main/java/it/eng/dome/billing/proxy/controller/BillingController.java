@@ -53,16 +53,15 @@ public class BillingController {
 	 /**
 	 * The POST /billing/previewPrice REST API is invoked to calculate the price preview (i.e., prices and taxes) of a ProcuctOrder (TMF622-v4).
 	 * 
-	 * @param orderJson The ProductOrder (TMF622-v4) as a Json string for which the prices and taxes must be calculated
-	 * @return The ProductOrder as a Json string with prices and taxes
+	 * @param billingPreviewRequestDTO The DTO, as a json string, contains information about the ProductOrder (TMF622-v4) and, in case of pay per use scenario, the list of simulate Usage (TMF635-v4) for which the price preview must be calculated.* @return The ProductOrder as a Json string with prices and taxes
 	 * @throws Throwable If an error occurs during the calculation of the product order's price preview
 	 */ 
 
 	@RequestMapping(value = "/previewPrice", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculatePricePreview(@RequestBody String orderJson) throws Throwable {
+	public String calculatePricePreview(@RequestBody String billingPreviewRequestDTO) throws Throwable {
 		logger.info("Received request to calculate price preview");
 		
-		String orderWithPrice = billing.billingPreviewPrice(orderJson); 
+		String orderWithPrice = billing.billingPreviewPrice(billingPreviewRequestDTO); 
 		
 		logger.info("Calculate Invoicing (preview price) to apply Taxes");
 		return billing.invoicingPreviewTaxes(orderWithPrice);
