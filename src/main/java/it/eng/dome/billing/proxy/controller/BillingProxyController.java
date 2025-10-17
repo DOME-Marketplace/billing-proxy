@@ -12,7 +12,10 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,11 +26,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import it.eng.dome.billing.proxy.dto.BillingPreviewRequestDTO;
+import it.eng.dome.billing.proxy.exception.BillingProxyException;
 import it.eng.dome.billing.proxy.service.BillingProxyService;
 import it.eng.dome.billing.proxy.service.BillingService;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
 import it.eng.dome.brokerage.billing.utils.BillingUtils;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPrice;
+import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.JSON;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf637.v4.model.ProductPrice;
@@ -36,8 +42,8 @@ import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
 
 @RestController
 @RequestMapping("/billing")
-public class BillingController {
-	private static final Logger logger = LoggerFactory.getLogger(BillingController.class);
+public class BillingProxyController {
+	private static final Logger logger = LoggerFactory.getLogger(BillingProxyController.class);
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
 
 	@Autowired
@@ -57,14 +63,40 @@ public class BillingController {
 	 * @throws Throwable If an error occurs during the calculation of the product order's price preview
 	 */ 
 
-	@RequestMapping(value = "/previewPrice", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculatePricePreview(@RequestBody String billingPreviewRequestDTO) throws Throwable {
-		logger.info("Received request to calculate price preview");
+		/*
+		 * @RequestMapping(value = "/previewPrice", method = RequestMethod.POST,
+		 * produces = "application/json", consumes = "application/json") public String
+		 * calculatePricePreview(@RequestBody String billingPreviewRequestDTO) throws
+		 * Throwable { logger.info("Received request to calculate price preview");
+		 * 
+		 * String orderWithPrice =
+		 * billing.billingPreviewPrice(billingPreviewRequestDTO);
+		 * 
+		 * logger.info("Calculate Invoicing (preview price) to apply Taxes"); return
+		 * billing.invoicingPreviewTaxes(orderWithPrice); }
+		 */
+	
+	@PostMapping("/previewPrice")
+	public ResponseEntity<ProductOrder> calculatePricePreview(@RequestBody BillingPreviewRequestDTO previewRequest){
+		logger.info("Received request to calculate price preview...");
 		
+		try {
+			if(previewRequest.getProductOrder()==null)
+				throw new BillingProxyException("Error in the BillingPreviewRequestDTO: the ProductOrder is null");
+			else {
+				logger.info("");
+				
+			}
+			
+			
+		}catch (BillingProxyException e){
+			logger.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+		}
 		String orderWithPrice = billing.billingPreviewPrice(billingPreviewRequestDTO); 
-		
-		logger.info("Calculate Invoicing (preview price) to apply Taxes");
-		return billing.invoicingPreviewTaxes(orderWithPrice);
+	
+		//logger.info("Calculate Invoicing (preview price) to apply Taxes");
+		//return billing.invoicingPreviewTaxes(orderWithPrice);
 	}
 
 	
@@ -76,8 +108,8 @@ public class BillingController {
      * @throws Throwable If an error occurs during the calculation of the bill for the Product
      */
 	@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculateBill(@RequestBody String billRequestDTO) throws Throwable {
-		logger.info("Received request to calculate the bill");
+	public String calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
+		logger.info("Received request to calculate the bill...");
 	
 		// Gets the AppliedCustomerBillingRate list invoking the billing-engine
 		String billsWithPrice = billing.bill(billRequestDTO);		

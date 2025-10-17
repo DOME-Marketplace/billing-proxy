@@ -15,19 +15,43 @@ import org.springframework.web.client.RestTemplate;
 public class BillingProxyService implements IProxyService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BillingProxyService.class);
+
+	@Override
+	public String billingPreviewPrice(String order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String invoicingPreviewTaxes(String order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String bill(String bill) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String billApplyTaxes(String bill) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
-	RestTemplate restTemplate = new RestTemplate();
+	//RestTemplate restTemplate = new RestTemplate();
 	
 
-	@Value("${billing.billing_engine}")
-	public String billinEngine;
-	
-	@Value("${billing.invoicing_service}")
-	public String invoicingService;
+	/*
+	 * @Value("${billing.billing_engine}") public String billinEngine;
+	 * 
+	 * @Value("${billing.invoicing_service}") public String invoicingService;
+	 */
 	
 
 
-	public String billingPreviewPrice(String billingPreviewRequestDTO) {
+	/*public String billingPreviewPrice(String billingPreviewRequestDTO) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> request = new HttpEntity<>(billingPreviewRequestDTO, headers);
@@ -103,6 +127,6 @@ public class BillingProxyService implements IProxyService {
 			logger.debug("Cannot retrieve the bill apply taxes from {}", invoicingService);
 			return null;
 		}
-	}
+	}*/
 
 }
