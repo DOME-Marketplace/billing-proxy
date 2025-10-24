@@ -92,9 +92,6 @@ public class BillingProxyController {
 	public ResponseEntity<ProductOrder> calculatePricePreview(@RequestBody BillingPreviewRequestDTO previewRequest){
 		logger.info("Received request to calculate price preview...");
 		
-		
-		logger.debug("****"+previewRequest.getProductOrder().toJson());
-		
 		try {
 			if(previewRequest.getProductOrder()==null)
 				throw new BillingProxyException("Error in the BillingPreviewRequestDTO: the ProductOrder is null");

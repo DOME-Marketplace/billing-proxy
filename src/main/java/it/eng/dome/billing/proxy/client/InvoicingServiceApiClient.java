@@ -25,9 +25,7 @@ public class InvoicingServiceApiClient {
 	private RestTemplate restTemplate;
 	private final String invoiceServiceUrl;
 	
-    public InvoicingServiceApiClient(/*RestTemplate restTemplate,*/
-             @Value("${billing.invoicing_service}") String baseUrl) {
-//    	this.restTemplate = restTemplate;
+    public InvoicingServiceApiClient(@Value("${billing.invoicing_service}") String baseUrl) {
     	this.invoiceServiceUrl = baseUrl;
     }
     
@@ -42,7 +40,7 @@ public class InvoicingServiceApiClient {
 		ResponseEntity<ProductOrder> response = restTemplate.postForEntity(url, request, ProductOrder.class);
 			
 		if (response != null && response.getBody() != null) {
-			logger.debug("Responce Body:\n" + response.getBody().toString());
+			logger.debug("Responce Body:\n" + response.getBody().toJson());
 			return response.getBody();
 		}else {
 			throw new BillingProxyException("Error in the invocation of the InvoicingService API: /invoicing/previewTaxes - Response body is null"); 

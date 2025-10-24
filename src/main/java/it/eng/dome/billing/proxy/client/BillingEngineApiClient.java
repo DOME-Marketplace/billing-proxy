@@ -22,16 +22,13 @@ import jakarta.validation.constraints.NotNull;
 public class BillingEngineApiClient {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BillingEngineApiClient.class);
-	
-	//private final RestTemplate restTemplate;
-	private  final String billinEngineUrl; 
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
+	private  final String billinEngineUrl; 
 	
-    public BillingEngineApiClient(/*RestTemplate restTemplate,*/
-             @Value("${billing.billing_engine}") String baseUrl) {
-    	//this.restTemplate = restTemplate;
+	
+    public BillingEngineApiClient( @Value("${billing.billing_engine}") String baseUrl) {
     	this.billinEngineUrl = baseUrl;
     }
     
@@ -41,16 +38,13 @@ public class BillingEngineApiClient {
     	HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		
-		logger.debug("**** "+billingPreviewRequestDTO.getProductOrder().toJson());
-		
 		HttpEntity<BillingPreviewRequestDTO> request = new HttpEntity<>(billingPreviewRequestDTO, headers);
 		
 		logger.info("Invocation of BillingEngine API: /billing/previewPrice...");
 		ResponseEntity<ProductOrder> response = restTemplate.postForEntity(url, request, ProductOrder.class);
 			
 		if (response != null && response.getBody() != null) {
-			//logger.debug("Responce Body:\n" + response.getBody().toString());
+			logger.debug("Responce Body:\n" + response.getBody().toJson());
 			return response.getBody();
 		}else {
 			throw new BillingProxyException("Error in the invocation of the BillingEngine API: /billing/previewPrice - Response body is null"); 
