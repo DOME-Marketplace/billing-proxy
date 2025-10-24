@@ -12,7 +12,10 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,11 +26,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import it.eng.dome.billing.proxy.client.BillingEngineApiClient;
+import it.eng.dome.billing.proxy.client.InvoicingServiceApiClient;
+import it.eng.dome.billing.proxy.exception.BillingProxyException;
+import it.eng.dome.billing.proxy.exception.BillingProxyValidationException;
 import it.eng.dome.billing.proxy.service.BillingProxyService;
-import it.eng.dome.billing.proxy.service.BillingService;
+import it.eng.dome.brokerage.billing.dto.BillingPreviewRequestDTO;
 import it.eng.dome.brokerage.billing.dto.BillingRequestDTO;
+import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
 import it.eng.dome.brokerage.billing.utils.BillingUtils;
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
+import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesResponseDTO;
 import it.eng.dome.tmforum.tmf620.v4.model.ProductOfferingPrice;
+import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
 import it.eng.dome.tmforum.tmf637.v4.JSON;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import it.eng.dome.tmforum.tmf637.v4.model.ProductPrice;
@@ -36,17 +47,24 @@ import it.eng.dome.tmforum.tmf678.v4.model.TimePeriod;
 
 @RestController
 @RequestMapping("/billing")
-public class BillingController {
-	private static final Logger logger = LoggerFactory.getLogger(BillingController.class);
+public class BillingProxyController {
+	private static final Logger logger = LoggerFactory.getLogger(BillingProxyController.class);
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
 
 	@Autowired
-	protected BillingProxyService billing;
+	private BillingProxyService billingProxyService;
+	
+	//@Autowired
+	//private BillingService billingService;
 	
 	@Autowired
-	private BillingService billingService;
+	private BillingEngineApiClient billingEngineApiClient;
 	
-	private final static String PREFIX_KEY = "period-";
+	@Autowired
+	private InvoicingServiceApiClient invoicingServiceApiClient;
+	
+	
+	//private final static String PREFIX_KEY = "period-";
 	
 
 	
@@ -57,14 +75,38 @@ public class BillingController {
 	 * @throws Throwable If an error occurs during the calculation of the product order's price preview
 	 */ 
 
-	@RequestMapping(value = "/previewPrice", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculatePricePreview(@RequestBody String billingPreviewRequestDTO) throws Throwable {
-		logger.info("Received request to calculate price preview");
+		/*
+		 * @RequestMapping(value = "/previewPrice", method = RequestMethod.POST,
+		 * produces = "application/json", consumes = "application/json") public String
+		 * calculatePricePreview(@RequestBody String billingPreviewRequestDTO) throws
+		 * Throwable { logger.info("Received request to calculate price preview");
+		 * 
+		 * String orderWithPrice =
+		 * billing.billingPreviewPrice(billingPreviewRequestDTO);
+		 * 
+		 * logger.info("Calculate Invoicing (preview price) to apply Taxes"); return
+		 * billing.invoicingPreviewTaxes(orderWithPrice); }
+		 */
+	
+	@PostMapping("/previewPrice")
+	public ResponseEntity<ProductOrder> calculatePricePreview(@RequestBody BillingPreviewRequestDTO previewRequest){
+		logger.info("Received request to calculate price preview...");
 		
-		String orderWithPrice = billing.billingPreviewPrice(billingPreviewRequestDTO); 
 		
-		logger.info("Calculate Invoicing (preview price) to apply Taxes");
-		return billing.invoicingPreviewTaxes(orderWithPrice);
+		logger.debug("****"+previewRequest.getProductOrder().toJson());
+		
+		try {
+			if(previewRequest.getProductOrder()==null)
+				throw new BillingProxyException("Error in the BillingPreviewRequestDTO: the ProductOrder is null");
+			else {
+				ProductOrder productOrder=billingEngineApiClient.billingPreviewPrice(previewRequest);
+				return ResponseEntity.ok(invoicingServiceApiClient.invoicingPreviewTaxes(productOrder));
+			}
+			
+		}catch (BillingProxyException e){
+			logger.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	
@@ -75,9 +117,9 @@ public class BillingController {
      * @return The list of AppliedCustomerBillingRate as a Json string with taxes
      * @throws Throwable If an error occurs during the calculation of the bill for the Product
      */
-	@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public String calculateBill(@RequestBody String billRequestDTO) throws Throwable {
-		logger.info("Received request to calculate the bill");
+	/*@RequestMapping(value = "/bill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public String calculateBill(@RequestBody BillingRequestDTO billRequestDTO) throws Throwable {
+		logger.info("Received request to calculate the bill...");
 	
 		// Gets the AppliedCustomerBillingRate list invoking the billing-engine
 		String billsWithPrice = billing.bill(billRequestDTO);		
@@ -96,7 +138,33 @@ public class BillingController {
         //2) Invoke the invoicing-service
         logger.info("Calculate Invoicing (bill) to apply Taxes");        
 		return billing.billApplyTaxes(appyTaxesRequestJsonStr);
+	}*/
+	
+	@PostMapping("/bill")
+	public ResponseEntity<ApplyTaxesResponseDTO> calculateBill(@RequestBody BillingRequestDTO billRequestDTO){
+		logger.info("Received request to calculate the bill...");
+		
+
+		try {
+			if(billRequestDTO.getProduct()==null)
+				throw new BillingProxyException("Error in the BillingRequestDTO: the Product is null");
+			
+			if(billRequestDTO.getTimePeriod()==null)
+				throw new BillingProxyException("Error in the BillingRequestDTO: the billingPeriod is null");
+			
+			BillingResponseDTO billsWithoutTaxes=billingEngineApiClient.billingBill(billRequestDTO);
+			
+			ApplyTaxesRequestDTO applyTaxesRequest=new ApplyTaxesRequestDTO(billRequestDTO.getProduct(),billsWithoutTaxes.getCustomerBill(),billsWithoutTaxes.getAcbr());
+				
+			return ResponseEntity.ok(invoicingServiceApiClient.invoicingApplyTaxes(applyTaxesRequest));
+
+				
+		}catch (BillingProxyException e){
+			logger.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
+
 	
 
 	/**
@@ -107,7 +175,7 @@ public class BillingController {
 	 * @return The list of AppliedCustomerBillingRate as a Json string with taxes
 	 * @throws Throwable If an error occurs during the calculation of the bill for the Product
 	 */
-	@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	/*@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public String calculateInstantBill(@RequestBody String product) throws Throwable {
 		
 		try {
@@ -128,8 +196,46 @@ public class BillingController {
 		}
 		
 		
-	}
+	}*/
 	
+	@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public ResponseEntity<BillingResponseDTO> calculateInstantBill(@RequestBody Product product) {
+		
+		try {
+			if(product==null)
+				throw new BillingProxyException("Error in the instantBill request: the Product is null"); 
+
+			logger.info("Received request for calculate a bill now - instant bill");
+			
+			BillingRequestDTO billingRequestDTO = billingProxyService.createBillingRequestDTOForInstantBill(product);
+			
+			if(billingRequestDTO==null) {
+				throw new BillingProxyException("Error during the creation of the BillingRequestDTO!");
+			}
+			
+			// Get current Date
+			//OffsetDateTime now = OffsetDateTime.now();
+			//logger.info("Starting calculate instant bill at {}", now.format(formatter));
+			
+			// Invoke method to calculate the bills for data now
+			//return calculateBillNow(product);
+			return ResponseEntity.ok(billingEngineApiClient.billingBill(billingRequestDTO));
+		} catch (BillingProxyValidationException e) {
+			logger.error(e.getMessage(), e);
+			// Java exception is converted into HTTP status code by the ControllerExceptionHandler
+			//throw new Exception(e); //throw (e.getCause() != null) ? e.getCause() : 
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			// Java exception is converted into HTTP status code by the ControllerExceptionHandler
+			//throw new Exception(e); //throw (e.getCause() != null) ? e.getCause() : 
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+	}
+
+
 	/**
 	 * The POST /billing/billForDate REST API is invoked to calculate the bill of a Product (TMF637-v4) with taxes considering as startdate the date in input.\n
 	 * The API identifies the groups of ProductPrices and TimePeriod that must be billed considering the specified date.
@@ -165,7 +271,7 @@ public class BillingController {
 		}
 	}*/
 	
-	private String calculateBillNow(String prod) throws Throwable {
+	/*private String calculateBillNow(String prod) throws Throwable {
 		try {
 			Assert.state(prod!=null, "Cannot calculate bill for empty Product!");
 			
@@ -197,10 +303,10 @@ public class BillingController {
 			// Java exception is converted into HTTP status code by the ControllerExceptionHandler
 			throw new Exception(e); //throw (e.getCause() != null) ? e.getCause() : e;
 		}
-	}
+	}*/
 	
 	//Remove [ and ] parenthesis from string (array)
-	private String cleanup(String str) {
+	/*private String cleanup(String str) {
 		ObjectMapper objectMapper = new ObjectMapper();
         
 		try {
@@ -211,19 +317,9 @@ public class BillingController {
 			logger.error("Cannot remove parenthesis [ and ] {}", e.getMessage());
 		} 
 		return str;
-	}
+	}*/
 
 
-	/*
-	 * Method to get the ApplyTaxesRequestDTO as a json string
-	 * 
-	 * @param appliedCustomerBillingRateListJson The AppliedCustomerBillingRate list represented as a JSON string
-	 * @param productJson The Product represented as a JSON string
-	 * @return The ApplyTaxesRequestDTO  represented as a JSON string
-	 */
-	private String getApplyTaxesRequestDTOtoJson(String appliedCustomerBillingRateListJson, String productJson) {
-		return "{ \"product\": " + capitalizeStatus(productJson) + ", \"appliedCustomerBillingRate\": " + appliedCustomerBillingRateListJson + "}";
-	}
 	 /*
 	  * Utility method used to identify for a specific Product and Date the groups of ProductPrices and TimePeriod that must be considered to make a bill now.
 	  * For each identified group will be generated a BillingRequestDTO containing the list of ProcutPrice, the TimePeriod and the Product.
@@ -232,7 +328,7 @@ public class BillingController {
 	  * @param product The Product that must be billed
 	  * @return A list of BillingRequestDTO 
 	  */
-	private List<BillingRequestDTO> getProductPricesAntTimePeriodGroupsForNow(Product product) throws Throwable {
+	/*private List<BillingRequestDTO> getProductPricesAntTimePeriodGroupsForNow(Product product) throws Throwable {
 		try {
 
 			List<BillingRequestDTO> brDTOList = new ArrayList<BillingRequestDTO>();
@@ -311,39 +407,7 @@ public class BillingController {
 			return null;
 		}
 		
-	}
-
+	}*/
 	
-	// Bugfix: ProductStatusType must be uppercase
-	private String capitalizeStatus(String json) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String capitalize = json;
-		 try {
-			ObjectNode jsonNode = (ObjectNode) objectMapper.readTree(json);
-			 String status = jsonNode.get("status").asText();
-			 jsonNode.put("status", status.toUpperCase());
-			 return objectMapper.writeValueAsString(jsonNode);
 
-		} catch (Exception e) {			
-			return capitalize;
-		}
-	}
-	
-	//TODO workaround to set the status value in lowercase
-	private String toLowerCaseStatus(String json, String path) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String lower = json;
-		try {
-			ObjectNode rootNode = (ObjectNode) objectMapper.readTree(json);
-			JsonNode statusNode = rootNode.at(path + "/status");
-			if (!statusNode.isMissingNode()) {
-				String status = statusNode.asText();
-				((ObjectNode) rootNode.at(path)).put("status", status.toLowerCase());
-			}
-			return objectMapper.writeValueAsString(rootNode);
-
-		} catch (Exception e) {			
-			return lower;
-		}
-	}
 }
