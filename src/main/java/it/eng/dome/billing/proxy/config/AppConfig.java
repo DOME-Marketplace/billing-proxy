@@ -3,7 +3,7 @@ package it.eng.dome.billing.proxy.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,15 +12,31 @@ public class AppConfig {
 
 
 	// register RestTemplate for serializing
+//	@Bean
+//    public RestTemplate restTemplate(ObjectMapper objectMapper) {
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        restTemplate.getMessageConverters().stream()
+//            .filter(c -> c instanceof MappingJackson2HttpMessageConverter)
+//            .forEach(c -> ((MappingJackson2HttpMessageConverter) c)
+//                .setObjectMapper(objectMapper));
+//
+//        return restTemplate;
+//    }
+	
+	// register RestClient for serializing
 	@Bean
-    public RestTemplate restTemplate(ObjectMapper objectMapper) {
-        RestTemplate restTemplate = new RestTemplate();
+    public RestClient restClient(ObjectMapper objectMapper) {
+        
+        MappingJackson2HttpMessageConverter jacksonConverter =
+                new MappingJackson2HttpMessageConverter(objectMapper);
 
-        restTemplate.getMessageConverters().stream()
-            .filter(c -> c instanceof MappingJackson2HttpMessageConverter)
-            .forEach(c -> ((MappingJackson2HttpMessageConverter) c)
-                .setObjectMapper(objectMapper));
-
-        return restTemplate;
+        return RestClient.builder()
+                .messageConverters(converters -> {
+                    converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
+                    converters.add(jacksonConverter);
+                })
+                .build();
     }
+
 }

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -18,7 +19,8 @@ import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import it.eng.dome.billing.proxy.model.InfoProxy;
+import it.eng.dome.brokerage.observability.info.Info;
+
 
 @Component
 public class StartupListener implements ApplicationListener<ApplicationReadyEvent> {
@@ -29,7 +31,9 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
     private static final Pattern PLACEHOLDER = Pattern.compile("\\$\\{([^:}]+)(?::([^}]*))?}");
 
 	private final String INFO_PATH = "/proxy/info";
-	private final RestTemplate restTemplate;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Value("${server.port}")
 	private int serverPort;
@@ -37,9 +41,6 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
 	@Value("${server.servlet.context-path}")
 	private String contextPath;
 
-	public StartupListener(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void onApplicationReady() {
@@ -49,7 +50,7 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
 
 		logger.info("Listener GET call to {}", url);
 		try {
-			InfoProxy response = restTemplate.getForObject(url, InfoProxy.class);
+			Info response = restTemplate.getForObject(url, Info.class);
 			logger.info("Started the {} version: {} ", response.getName(), response.getVersion());
 
 		} catch (Exception e) {

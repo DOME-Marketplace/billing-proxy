@@ -4,11 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import it.eng.dome.billing.proxy.exception.BillingProxyException;
@@ -28,9 +27,13 @@ import jakarta.validation.constraints.NotNull;
 public class BillingEngineApiClient {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BillingEngineApiClient.class);
-
+	
+	private final String PREVIEW_PRICE_PATH = "/billing/previewPrice";
+	private final String BILL_PATH = "/billing/bill";
+	
 	@Autowired
-	private RestTemplate restTemplate;
+	private RestClient restClient;
+	
 	private  final String billinEngineUrl; 
 	
 	/**
@@ -38,7 +41,7 @@ public class BillingEngineApiClient {
 	 * 
 	 * @param baseUrl the base URL of the DOME BillingEngine component
 	 */
-    public BillingEngineApiClient( @Value("${billing.billing_engine}") String baseUrl) {
+    public BillingEngineApiClient(@Value("${billing.billing_engine}") String baseUrl) {
     	this.billinEngineUrl = baseUrl;
     }
     
@@ -51,20 +54,21 @@ public class BillingEngineApiClient {
      */
     public ProductOrder billingPreviewPrice(@NotNull BillingPreviewRequestDTO billingPreviewRequestDTO) throws BillingProxyException{ 
     	
-    	String url = billinEngineUrl + "/billing/previewPrice";
-    	HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+    	String url = billinEngineUrl + PREVIEW_PRICE_PATH;
+		logger.info("Invocation of Billing Engine API: {}", url);
 		
-		HttpEntity<BillingPreviewRequestDTO> request = new HttpEntity<>(billingPreviewRequestDTO, headers);
-		
-		logger.info("Invocation of BillingEngine API: /billing/previewPrice...");
-		ResponseEntity<ProductOrder> response = restTemplate.postForEntity(url, request, ProductOrder.class);
+		ResponseEntity<ProductOrder> response = restClient.post()
+	        .uri(url)
+	        .contentType(MediaType.APPLICATION_JSON)
+	        .body(billingPreviewRequestDTO)
+	        .retrieve()
+	        .toEntity(ProductOrder.class);
 			
 		if (response != null && response.getBody() != null) {
 			//logger.debug("Responce Body:\n" + response.getBody().toJson());
 			return response.getBody();
 		}else {
-			throw new BillingProxyException("Error in the invocation of the BillingEngine API: /billing/previewPrice - Response body is null"); 
+			throw new BillingProxyException("Error in the invocation of the Billing Engine API: " + url + " - Response body is null");
 		}
     }
     
@@ -77,19 +81,21 @@ public class BillingEngineApiClient {
      */
     public BillingResponseDTO billingBill(@NotNull BillingRequestDTO billingRequestDTO) throws BillingProxyException{
     	
-    	String url = billinEngineUrl + "/billing/bill";
-    	HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<BillingRequestDTO> request = new HttpEntity<>(billingRequestDTO, headers);
+    	String url = billinEngineUrl + BILL_PATH;
+		logger.info("Invocation of Billing Engine API: {}", url);
 		
-		logger.info("Invocation of BillingEngine API: /billing/bill...");
-		ResponseEntity<BillingResponseDTO> response = restTemplate.postForEntity(url, request, BillingResponseDTO.class);
+		ResponseEntity<BillingResponseDTO> response = restClient.post()
+		        .uri(url)
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .body(billingRequestDTO)
+		        .retrieve()
+		        .toEntity(BillingResponseDTO.class);
 			
 		if (response != null && response.getBody() != null) {
 			//logger.debug("Responce Body:\n" + response.getBody().toString());
 			return response.getBody();
 		}else {
-			throw new BillingProxyException("Error in the invocation of the BillingEngine API: /billing/bill - Response body is null"); 
+			throw new BillingProxyException("Error in the invocation of the Billing Engine API: " + url + " - Response body is null");
 		}
     }
 
