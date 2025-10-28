@@ -2,6 +2,15 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
+### <code>2.0.0</code> :calendar: 28/10/2025
+**Improvements**
+* Update `/billing/previewPrice`, `/billing/bill` and `/billing/instantBill` REST API with DTOs 
+* Add Exception Management
+* Add **JacksonModuleConfig**
+
+**BugFixing**
+* Fixed JSON serialization and deserialization issues
+
 ### <code>1.2.1</code> :calendar: 15/07/2025
 **Improvements**
 * Update of the `basePath` for building TMForum API URLs with or without **envoy** usage.

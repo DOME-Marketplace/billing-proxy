@@ -6,6 +6,10 @@ import java.util.stream.Collectors;
 
 import it.eng.dome.billing.proxy.validator.ValidationIssue;
 
+/**
+ * Represents a BillingProxy validation exception, raised when an error occurs during the validation of the TMForum entities
+ * managed during the BillingProxy processing
+ */
 public class BillingProxyValidationException extends Exception {
 
 	private static final long serialVersionUID = 1L;

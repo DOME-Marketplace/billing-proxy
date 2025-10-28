@@ -1,5 +1,8 @@
 package it.eng.dome.billing.proxy.validator;
 
+/**
+ * Class representing a validation issue with a message ad a severity
+ */
 public class ValidationIssue {
 	
 	private String message;

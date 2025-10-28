@@ -12,6 +12,9 @@ build:
   version: "@project.version@"
   timestamp: "@timestamp@"
   
+spring:
+  jackson:
+    default-property-inclusion: non_empty
 
 # Logging Configuration
 logging:
@@ -61,4 +64,3 @@ tmforumapi:
      
   # TMF_ENVOY=true - internal paths used with envoy = true
   tmf620_catalog_path: tmf-api/productCatalogManagement/v4
-  
