@@ -3,10 +3,10 @@ package it.eng.dome.billing.proxy.exception;
 /**
  * General BillingProzy exception
  */
-public class BillingProxyException extends Exception{
+public class BillingProxyException extends Exception {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -6798007748994356476L;
+
 	private String message;
 
 	public BillingProxyException(String message) {
@@ -14,6 +14,7 @@ public class BillingProxyException extends Exception{
 		this.message = message;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}
