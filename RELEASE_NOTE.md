@@ -15,6 +15,7 @@
 **BugFixing**
 * Fixed JSON serialization and deserialization issues.
 * Remove unused `TmfApiFactory` class.
+* Replace **RestTemplate** for **RestClient**.
 
 
 ### <code>1.2.1</code> :calendar: 15/07/2025
