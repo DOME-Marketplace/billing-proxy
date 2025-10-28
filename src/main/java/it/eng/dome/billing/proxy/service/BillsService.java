@@ -33,7 +33,7 @@ public class BillsService {
 	/**
 	 * Calls the Invoicing Service for getting info.
 	 * 
-	 * @return
+	 * @return Info
 	 * @throws Exception
 	 */
 	public Info getInfoInvoicingService() throws Exception {
