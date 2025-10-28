@@ -41,7 +41,9 @@ public class BillsService {
 			
 			ResponseEntity<Info> response = restClient.get()
 					.uri(invoicingServiceEndpoint + INVOICING_PATH_INFO)
-					.accept(MediaType.APPLICATION_JSON).retrieve().toEntity(Info.class);
+					.accept(MediaType.APPLICATION_JSON)
+					.retrieve()
+					.toEntity(Info.class);
 			
 			return response.getBody();
 		} catch (Exception e) {
@@ -61,7 +63,9 @@ public class BillsService {
 		try {
 			ResponseEntity<Info> response = restClient.get()
 					.uri(billingEngineEndpoint + ENGINE_PATH_INFO)
-					.accept(MediaType.APPLICATION_JSON).retrieve().toEntity(Info.class);
+					.accept(MediaType.APPLICATION_JSON)
+					.retrieve()
+					.toEntity(Info.class);
 			
 			return response.getBody();
 		} catch (Exception e) {

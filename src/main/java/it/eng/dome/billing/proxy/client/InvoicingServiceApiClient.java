@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import it.eng.dome.billing.proxy.exception.BillingProxyException;
@@ -26,8 +27,11 @@ import jakarta.validation.constraints.NotNull;
 public class InvoicingServiceApiClient {
 	private static final Logger logger = LoggerFactory.getLogger(InvoicingServiceApiClient.class);
 	
+	private final String PREVIEW_TAXES_PATH = "/invoicing/previewTaxes";
+	private final String APPLY_TAXES_PATH = "/invoicing/applyTaxes";
+	
 	@Autowired
-	private RestTemplate restTemplate;
+	private RestClient restClient;
 	private final String invoiceServiceUrl;
 	
 	/**
@@ -47,19 +51,22 @@ public class InvoicingServiceApiClient {
      */
     public ProductOrder invoicingPreviewTaxes(@NotNull ProductOrder productOrder) throws BillingProxyException{
     	
-    	String url = invoiceServiceUrl + "/invoicing/previewTaxes";
-    	HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ProductOrder> request = new HttpEntity<>(productOrder, headers);
+    	String url = invoiceServiceUrl + PREVIEW_TAXES_PATH;
+		logger.info("Invocation of InvoicingService API: {}", PREVIEW_TAXES_PATH);
 		
-		logger.info("Invocation of InvoicingService API: /invoicing/previewTaxes...");
-		ResponseEntity<ProductOrder> response = restTemplate.postForEntity(url, request, ProductOrder.class);
+		ResponseEntity<ProductOrder> response = restClient.post()
+	        .uri(url)
+	        .contentType(MediaType.APPLICATION_JSON)
+	        .body(productOrder)
+	        .retrieve()
+	        .toEntity(ProductOrder.class);
+		
 			
 		if (response != null && response.getBody() != null) {
 			//logger.debug("Responce Body:\n" + response.getBody().toJson());
 			return response.getBody();
 		}else {
-			throw new BillingProxyException("Error in the invocation of the InvoicingService API: /invoicing/previewTaxes - Response body is null"); 
+			throw new BillingProxyException("Error in the invocation of the InvoicingService API: " + url + " - Response body is null"); 
 		}
     }
     
@@ -71,19 +78,21 @@ public class InvoicingServiceApiClient {
      */
     public BillingResponseDTO invoicingApplyTaxes(@NotNull ApplyTaxesRequestDTO applyTaxesRequestDTO) throws BillingProxyException{
     	
-    	String url = invoiceServiceUrl + "/invoicing/applyTaxes";
-    	HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ApplyTaxesRequestDTO> request = new HttpEntity<>(applyTaxesRequestDTO, headers);
-		
-		logger.info("Invocation of InvoicingService API: /invoicing/applyTaxes...");
-		ResponseEntity<BillingResponseDTO> response = restTemplate.postForEntity(url, request, BillingResponseDTO.class);
+    	String url = invoiceServiceUrl + APPLY_TAXES_PATH;
+		logger.info("Invocation of InvoicingService API: {}", APPLY_TAXES_PATH);
+
+		ResponseEntity<BillingResponseDTO> response = restClient.post()
+	        .uri(url)
+	        .contentType(MediaType.APPLICATION_JSON)
+	        .body(applyTaxesRequestDTO)
+	        .retrieve()
+	        .toEntity(BillingResponseDTO.class);
 			
 		if (response != null && response.getBody() != null) {
 			//logger.debug("Responce Body:\n" + response.getBody().toString());
 			return response.getBody();
 		}else {
-			throw new BillingProxyException("Error in the invocation of the InvoicingService API: /invoicing/applyTaxes - Response body is null"); 
+			throw new BillingProxyException("Error in the invocation of the InvoicingService API: " + url + " - Response body is null"); 
 		}
     }
 }
