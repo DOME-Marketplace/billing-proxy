@@ -4,13 +4,14 @@
 
 ### <code>2.0.0</code> :calendar: 29/10/2025
 **Improvements**
-* Update `/billing/previewPrice`, `/billing/bill` and `/billing/instantBill` REST API with DTOs. 
+* Update `/billing/previewPrice`, `/billing/bill` REST API with DTOs. 
 * Add Exception Management.
-* Usage of the new `Brokerage Utils` version: `2.2.0`.
+* Usage of the new `Brokerage Utils` version: `2.2.2`.
 * Add **JacksonModuleConfig** to *serialize* and *deserialize* the **TMForum enum types**.
 * Usage of `AbstractHealthService` class from `Brokerage Utils` to manage **getInfo()** and **getHealth()** features.
 * Add `TrailingSlashFilter` filter to remove trailing slash from request path.
 * Generate automatic `REST_APIs.md` file from **Swagger APIs** using the `generate-rest-apis` profile.
+* Deprecated `/billing/instantBill` REST API
 
 **BugFixing**
 * Fixed JSON serialization and deserialization issues.

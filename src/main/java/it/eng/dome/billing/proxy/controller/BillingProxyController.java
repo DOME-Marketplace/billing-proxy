@@ -70,7 +70,7 @@ public class BillingProxyController {
 	/**
      * The POST /billing/bill REST API is invoked to calculate the bill of a {@link Product} with taxes.
      * 
-     * @param BillingRequestDTO The DTO contains information about the Product and the billingPeriod (i.e., {@link TimePeriod}) for which the bill must be calculated.
+     * @param billRequestDTO {@link BillingResponseDTO} containing information about the {@link Product} and the billingPeriod (i.e., {@link TimePeriod}) for which the bill must be calculated.
      * @return A {@link BillingResponseDTO} containing the bill with taxes
      */
 	@PostMapping("/bill")
@@ -105,6 +105,7 @@ public class BillingProxyController {
 	 * @param product The Product for which the bill must be calculated now 
 	 * @return A {@link BillingResponseDTO} with taxes
 	 */
+	@Deprecated
 	@RequestMapping(value = "/instantBill", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public ResponseEntity<BillingResponseDTO> calculateInstantBill(@RequestBody Product product) {
 		

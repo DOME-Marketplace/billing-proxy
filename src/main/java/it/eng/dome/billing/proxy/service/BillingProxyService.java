@@ -32,6 +32,7 @@ public class BillingProxyService {
 	 * @return The BillingRequestDTO to manage instant bill
 	 * @throws BillingProxyValidationException if a validation error of the Product occurs
 	 */
+	@Deprecated
 	public BillingRequestDTO createBillingRequestDTOForInstantBill(@NotNull Product product) throws BillingProxyValidationException {
 
 		OffsetDateTime now = OffsetDateTime.now();
