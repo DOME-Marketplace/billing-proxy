@@ -49,3 +49,14 @@ management:
 billing:
   invoicing_service: ${INVOICING_SERVICE:http://localhost:8380}
   billing_engine: ${BILLING_ENGINE:http://localhost:8080}
+  
+tmforumapi:
+  tmf_endpoint: ${TMF_ENDPOINT:http://tm-forum-api}
+  tmf_envoy:  ${TMF_ENVOY:true}
+  # valid only if envoy false
+  tmf_namespace:  ${TMF_NAMESPACE:marketplace}
+  tmf_postfix:  ${TMF_POSTFIX:svc.cluster.local}
+  tmf_port:  ${TMF_PORT:8080}
+  
+  tmf620_catalog_path: tmf-api/productCatalogManagement/v4
+  tmf637_billing_path: tmf-api/productInventory/v4

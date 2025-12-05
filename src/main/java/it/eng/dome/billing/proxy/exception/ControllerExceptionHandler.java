@@ -69,10 +69,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, ex));
 	}
 	
-	@ExceptionHandler(BillingProxyValidationException.class)
-	protected ResponseEntity<Object> handleApiException(HttpServletRequest request, BillingProxyValidationException ex) {
-		return buildResponseEntity(new ErrorResponse(request, HttpStatus.BAD_REQUEST, ex));
-	}
 		
 	private ResponseEntity<Object> buildResponseEntity(ErrorResponse errorResponse) {
 		logger.error("{} - {}", errorResponse.getStatus(), errorResponse.getMessage());

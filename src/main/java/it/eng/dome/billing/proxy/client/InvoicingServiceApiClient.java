@@ -1,9 +1,12 @@
 package it.eng.dome.billing.proxy.client;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,9 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import it.eng.dome.billing.proxy.exception.BillingProxyException;
-import it.eng.dome.brokerage.billing.dto.BillingResponseDTO;
-import it.eng.dome.brokerage.invoicing.dto.ApplyTaxesRequestDTO;
+import it.eng.dome.billing.proxy.utils.URLUtils;
+import it.eng.dome.brokerage.model.Invoice;
 import it.eng.dome.tmforum.tmf622.v4.model.ProductOrder;
-import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -43,13 +45,20 @@ public class InvoicingServiceApiClient {
     
     /**
      * Invokes the InvoicingService (IS) component for the calculation of the price preview with taxes of a {@link ProductOrder}
+     * 
      * @param productOrder the ProductOrder to which the taxes must be applied
+     * @param endpoint The endpoint of the IS. If null the default DOME IS endpoint will be considered
      * @return the ProductOrder with price and taxes
      * @throws BillingProxyException if an error occurs during the invocation of the /invoicing/previewTaxes REST API
      */
-    public ProductOrder invoicingPreviewTaxes(@NotNull ProductOrder productOrder) throws BillingProxyException{
+    public ProductOrder invoicingPreviewTaxes(@NotNull ProductOrder productOrder, String endpoint) throws BillingProxyException{
     	
-    	String url = invoiceServiceUrl + PREVIEW_TAXES_PATH;
+    	String url;
+    	if(endpoint!=null)
+    		url= URLUtils.buildUrl(endpoint, PREVIEW_TAXES_PATH);
+    	else
+    		url =URLUtils.buildUrl(invoiceServiceUrl, PREVIEW_TAXES_PATH);
+
 		logger.info("Invocation of InvoicingService API: {}", PREVIEW_TAXES_PATH);
 		
 		ResponseEntity<ProductOrder> response = restClient.post()
@@ -61,7 +70,6 @@ public class InvoicingServiceApiClient {
 		
 			
 		if (response != null && response.getBody() != null) {
-			//logger.debug("Responce Body:\n" + response.getBody().toJson());
 			return response.getBody();
 		}else {
 			throw new BillingProxyException("Error in the invocation of the InvoicingService API: " + url + " - Response body is null"); 
@@ -69,25 +77,31 @@ public class InvoicingServiceApiClient {
     }
     
     /**
-     * Invokes the InvoicingService (IS) component to apply taxes to the bills of a {@link Product}
-     * @param applyTaxesRequestDTO A {@link ApplyTaxesRequestDTO} to give in input to the /invoicing/applyTaxes REST API of the IS
-     * @return The {@link BillingResponseDTO} with taxes
-     * @throws BillingProxyException  if an error occurs during the invocation of the /invoicing/applyTaxes REST API
+     * Invokes the InvoicingService (IS) component to apply taxes to a list of {@link Invoice}
+     * 
+     * @param invoices A list of {@link Invoice} to give in input to the REST API /invoicing/applyTaxes of the IS
+     * @param endpoint The endpoint of the IS. If null the default DOME IE endpoint will be considered 
+     * @return A list of {@link Invoice} with taxes
+     * @throws BillingProxyException  if an error occurs during the invocation of the REST API /invoicing/applyTaxes 
      */
-    public BillingResponseDTO invoicingApplyTaxes(@NotNull ApplyTaxesRequestDTO applyTaxesRequestDTO) throws BillingProxyException{
+    public List<Invoice> invoicingApplyTaxes(@NotNull List<Invoice> invoices, String endpoint) throws BillingProxyException{
     	
-    	String url = invoiceServiceUrl + APPLY_TAXES_PATH;
+    	String url;
+    	if(endpoint!=null)
+    		url= URLUtils.buildUrl(endpoint, APPLY_TAXES_PATH);
+    	else
+    		url =URLUtils.buildUrl(invoiceServiceUrl, APPLY_TAXES_PATH);
+    	
 		logger.info("Invocation of InvoicingService API: {}", APPLY_TAXES_PATH);
 
-		ResponseEntity<BillingResponseDTO> response = restClient.post()
+		ResponseEntity<List<Invoice>> response = restClient.post()
 	        .uri(url)
 	        .contentType(MediaType.APPLICATION_JSON)
-	        .body(applyTaxesRequestDTO)
+	        .body(invoices)
 	        .retrieve()
-	        .toEntity(BillingResponseDTO.class);
+	        .toEntity(new ParameterizedTypeReference<List<Invoice>>() {});
 			
 		if (response != null && response.getBody() != null) {
-			//logger.debug("Responce Body:\n" + response.getBody().toString());
 			return response.getBody();
 		}else {
 			throw new BillingProxyException("Error in the invocation of the InvoicingService API: " + url + " - Response body is null"); 
