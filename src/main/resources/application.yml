@@ -43,7 +43,7 @@ management:
       show-details: never
   health:
     probes:
-  enabled: true	
+      enabled: true	
 
 # Billing Service
 billing:
