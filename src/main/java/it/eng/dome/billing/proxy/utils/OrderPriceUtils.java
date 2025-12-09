@@ -40,6 +40,11 @@ public class OrderPriceUtils {
 		return totalAlteratedPrice.floatValue();
 	}
 	
+	/**
+	 * Return the {@link PriceType} of the specified {@link OrderPrice}
+	 * @param orderPrice the {@link OrderPrice} instance
+	 * @return the {@link PriceType} of the specified {@link OrderPrice}
+	 */
 	public static PriceType getPriceType(@NonNull OrderPrice orderPrice) {
 		String priceType=orderPrice.getPriceType();
 		
@@ -50,6 +55,11 @@ public class OrderPriceUtils {
 		}
 	}
 	
+	/**
+	 * Return the {@link RecurringChargePeriod} of the specified {@link OrderPrice}
+	 * @param orderPrice the {@link OrderPrice} instance
+	 * @return the {@link RecurringChargePeriod} of the specified {@link OrderPrice}
+	 */
 	public static RecurringChargePeriod getRecurrigChargePeriod(@NotNull OrderPrice orderPrice) {
 		String recurringChargePeriod=orderPrice.getRecurringChargePeriod();
 		
@@ -60,10 +70,20 @@ public class OrderPriceUtils {
 		}
 	}
 	
+	/**
+	 * Return the dutyFreePrice of the specified {@link OrderPrice}
+	 * @param orderPrice the {@link OrderPrice} instance
+	 * @return the dutyFreePrice of the specified {@link OrderPrice}
+	 */
 	public static float getDutyFreePrice(@NonNull OrderPrice orderPrice) {
 		return orderPrice.getPrice().getDutyFreeAmount().getValue();
 	}
 	
+	/**
+	 * Return the currency of the specified {@link OrderPrice}
+	 * @param orderPrice the {@link OrderPrice} instance
+	 * @return the currency of the specified {@link OrderPrice}
+	 */
 	public static String getCurrency(@NonNull OrderPrice orderPrice) {
 		return orderPrice.getPrice().getDutyFreeAmount().getUnit();
 	}

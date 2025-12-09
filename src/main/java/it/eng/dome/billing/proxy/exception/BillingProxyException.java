@@ -1,7 +1,7 @@
 package it.eng.dome.billing.proxy.exception;
 
 /**
- * General BillingProzy exception
+ * General BillingProxy exception
  */
 public class BillingProxyException extends Exception {
 

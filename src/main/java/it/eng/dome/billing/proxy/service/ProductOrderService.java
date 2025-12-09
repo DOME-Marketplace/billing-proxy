@@ -136,7 +136,7 @@ public class ProductOrderService {
 		Price orderTotalPrice=TMForumEntityUtils.createPriceTMF622(money);
 		OrderPrice orderTotalPriceElement=TMForumEntityUtils.createOrderTotalPriceItemTMF622(orderTotalPrice, key);
 		
-		logger.info("Order total price: {} euro ", orderTotalPriceAmount);
+		logger.info("Order total price: {} {} ", orderTotalPriceAmount, currency);
 		return orderTotalPriceElement;
 	}
 

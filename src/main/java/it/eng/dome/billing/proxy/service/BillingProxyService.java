@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import it.eng.dome.billing.proxy.client.BillingEngineApiClient;
 import it.eng.dome.billing.proxy.client.InvoicingServiceApiClient;
@@ -27,6 +28,7 @@ import it.eng.dome.tmforum.tmf622.v4.model.ProductOrderItem;
 import it.eng.dome.tmforum.tmf637.v4.model.Product;
 import jakarta.validation.constraints.NotNull;
 
+@Service
 public class BillingProxyService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BillingProxyService.class);
@@ -96,22 +98,18 @@ public class BillingProxyService {
 			    String url = entry.getKey();
 			    List<ProductOrderItem> items = entry.getValue();
 
-			   // if ("__NO_URL__".equals(url)) {
-
-			        for (ProductOrderItem item : items) {
-			            ProductOrder tempProdutOrder=productOrderService.uptateProductOrderItems(productOrderToUpdate,
-			            		new ArrayList<ProductOrderItem>(List.of(item)));
-			            
-			            BillingPreviewRequestDTO tempBillingPreviewRequestDTO=new BillingPreviewRequestDTO(tempProdutOrder, billingPreviewRequestDTO.getUsage());
-			            
-			            tempProdutOrder=billingEngineApiClient.billingPreviewPrice(tempBillingPreviewRequestDTO, url);
-			            temporaryProductOrders.add(tempProdutOrder);
-			      //  }
-			  //  } else {
-			        // servizio Y per ciascun gruppo con URL
-			  //      for (ProductOrderItem item : items) {
-			   //         callServiceY(url, item);
-			   //    }
+			    for (ProductOrderItem item : items) {
+		            ProductOrder tempProdutOrder=productOrderService.uptateProductOrderItems(productOrderToUpdate,
+		            		new ArrayList<ProductOrderItem>(List.of(item)));
+		            
+		            BillingPreviewRequestDTO tempBillingPreviewRequestDTO=new BillingPreviewRequestDTO(tempProdutOrder, billingPreviewRequestDTO.getUsage());
+		            
+		            if ("__NO_URL__".equals(url))
+		            	tempProdutOrder=billingEngineApiClient.billingPreviewPrice(tempBillingPreviewRequestDTO, null);
+		            else
+		            	tempProdutOrder=billingEngineApiClient.billingPreviewPrice(tempBillingPreviewRequestDTO, url);
+		           
+		            temporaryProductOrders.add(tempProdutOrder);
 			    }
 			}
 			

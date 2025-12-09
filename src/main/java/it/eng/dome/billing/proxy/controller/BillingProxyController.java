@@ -32,10 +32,6 @@ public class BillingProxyController {
 	
 	@Autowired
 	private BillingProxyService billingProxyService;
-	//private BillingEngineApiClient billingEngineApiClient;
-	
-	@Autowired
-	//private InvoicingServiceApiClient invoicingServiceApiClient;
 	
 	 /**
 	 * The REST API POST /billing/previewPrice is invoked to calculate the price preview (i.e., prices and taxes) of a {@link ProductOrder}.
