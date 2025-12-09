@@ -2,10 +2,10 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
-### <code>2.1.0</code> :calendar: 29/10/2025
+### <code>2.1.0</code> :calendar: 09/12/2025
 **Improvements**
-* Added management for the use of external Billing Engine(s)
-* Usage of the `Brokerage Utils` version: `2.2.4`.
+* Added management for the use of **external** Billing Engine(s)
+* Usage of the `Brokerage Utils` version: `2.2.5`.
 
 ### <code>2.0.0</code> :calendar: 29/10/2025
 **Improvements**
