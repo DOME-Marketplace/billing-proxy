@@ -5,13 +5,6 @@ server:
   servlet:
     context-path:  ${BILLING_PREFIX:/}
 
-application:
-  name: "@project.artifactId@"
-
-build: 
-  version: "@project.version@"
-  timestamp: "@timestamp@"
-  
 spring:
   jackson:
     default-property-inclusion: non_empty

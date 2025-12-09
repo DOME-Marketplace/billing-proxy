@@ -6,6 +6,9 @@
 **Improvements**
 * Added management for the use of **external** Billing Engine(s)
 * Usage of the `Brokerage Utils` version: `2.2.5`.
+* Usage of the `getChecksOnSelf` from `AbstractHealthService` of last version of `brokerage-utils`.
+* Usage of the `AbstractMarkdownGenerator` class to generate `REST_APIs.md`.
+
 
 ### <code>2.0.0</code> :calendar: 29/10/2025
 **Improvements**
