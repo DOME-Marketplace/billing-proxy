@@ -51,7 +51,7 @@ public class BillingProxyService {
 	
 	public ProductOrder billingPreviewPrice(@NotNull BillingPreviewRequestDTO billingPreviewRequestDTO) throws BillingProxyException{
 		
-		ProductOrder updatedProductOrder=null;
+		ProductOrder updatedProductOrder;
 		ProductOrder productOrderToUpdate=billingPreviewRequestDTO.getProductOrder();
 		
 		if(productOrderToUpdate==null)
@@ -155,8 +155,7 @@ public class BillingProxyService {
 	}
 	
 	public List<Invoice> billingBill(@NotNull BillingRequestDTO billingRequestDTO) throws BillingProxyException, it.eng.dome.tmforum.tmf637.v4.ApiException{
-		List<Invoice> invoices=new ArrayList<Invoice>();
-		
+				
 		if(billingRequestDTO.getProductId()==null || billingRequestDTO.getProductId().isBlank())
 			throw new BillingProxyException("Missing the identifier of the Product in the BillingRequestDTO");
 		
@@ -168,9 +167,7 @@ public class BillingProxyService {
 			beEnpoint=this.getPricingLogicAlgorithm(product.getProductOffering().getId());
 		}
 		
-		invoices=billingEngineApiClient.billingBill(billingRequestDTO, beEnpoint);	
-		
-		return invoices;
+		return billingEngineApiClient.billingBill(billingRequestDTO, beEnpoint);
 	}
 	
 	public List<Invoice> invoicingApplyTaxes(@NotNull List<Invoice> invoices) throws BillingProxyException{
@@ -178,7 +175,6 @@ public class BillingProxyService {
 	}
 	
 	public List<Invoice> billingInstantBill(@NotNull InstantBillingRequestDTO instantBillingRequestDTO) throws BillingProxyException{
-		List<Invoice> invoices=new ArrayList<Invoice>();
 		
 		Product product=instantBillingRequestDTO.getProduct();
 		
@@ -191,9 +187,7 @@ public class BillingProxyService {
 			beEnpoint=this.getPricingLogicAlgorithm(product.getProductOffering().getId());
 		}
 		
-		invoices=billingEngineApiClient.billingInstantBill(instantBillingRequestDTO, beEnpoint);
-		
-		return invoices;
+		return billingEngineApiClient.billingInstantBill(instantBillingRequestDTO, beEnpoint);
 	}
 	
 

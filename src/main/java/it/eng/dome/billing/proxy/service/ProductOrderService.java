@@ -84,7 +84,7 @@ public class ProductOrderService {
 	
 	// Generate an Hash Map to manage aggregation of the OrderPrice
 	private Map<PriceTypeKey, List<OrderPrice>> generateOrderPriceGroups(@NotNull List<OrderPrice> orderPrices){
-		HashMap<PriceTypeKey, List<OrderPrice>> orderPriceGroups=new HashMap<PriceTypeKey, List<OrderPrice>>();
+		Map<PriceTypeKey, List<OrderPrice>> orderPriceGroups=new HashMap<PriceTypeKey, List<OrderPrice>>();
 		
 		for(OrderPrice op:orderPrices) {
 			PriceTypeKey key;
