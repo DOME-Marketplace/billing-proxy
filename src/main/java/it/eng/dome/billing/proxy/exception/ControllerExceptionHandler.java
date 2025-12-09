@@ -63,6 +63,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleApiException(HttpServletRequest request, it.eng.dome.tmforum.tmf620.v4.ApiException ex) {
 		return buildResponseEntity(new ErrorResponse(request, HttpStatus.SERVICE_UNAVAILABLE, ex));
 	}
+	
+	@ExceptionHandler(BillingProxyException.class)
+	protected ResponseEntity<Object> handleApiException(HttpServletRequest request, BillingProxyException ex) {
+		return buildResponseEntity(new ErrorResponse(request, HttpStatus.INTERNAL_SERVER_ERROR, ex));
+	}
+	
 		
 	private ResponseEntity<Object> buildResponseEntity(ErrorResponse errorResponse) {
 		logger.error("{} - {}", errorResponse.getStatus(), errorResponse.getMessage());

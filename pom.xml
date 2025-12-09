@@ -13,7 +13,7 @@
 		
 	<groupId>it.eng.dome.billing</groupId>
 	<artifactId>proxy</artifactId>
-	<version>1.2.1</version>
+	<version>2.1.0</version>
 	<name>Billing Proxy</name>
 	<description>Billing Proxy for DOME project</description>
 	
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>it.eng.dome.brokerage</groupId>
 			<artifactId>brokerage-utils</artifactId>
-			<version>[2.1.0, 2.2.0)</version>
+			<version>2.2.5</version>
 		</dependency>
 		  
 		<!-- TMF620 Catalog -->
@@ -130,5 +130,17 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+	    <profile>
+	        <id>generate-rest-apis</id>
+	        <activation>
+	            <activeByDefault>false</activeByDefault>
+	        </activation>
+	        <properties>
+	            <spring-boot.run.arguments>--rest_api_docs.generate_md=true</spring-boot.run.arguments>
+	        </properties>
+	    </profile>
+	</profiles>
 
 </project>

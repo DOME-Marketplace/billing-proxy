@@ -2,6 +2,27 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
+### <code>2.1.0</code> :calendar: 09/12/2025
+**Improvements**
+* Added management for the use of **external** Billing Engine(s)
+* Usage of the `Brokerage Utils` version: `2.2.5`.
+
+### <code>2.0.0</code> :calendar: 29/10/2025
+**Improvements**
+* Update `/billing/previewPrice`, `/billing/bill` and `/billing/instantBill` REST API with DTOs. 
+* Add Exception Management.
+* Usage of the new `Brokerage Utils` version: `2.2.0`.
+* Add **JacksonModuleConfig** to *serialize* and *deserialize* the **TMForum enum types**.
+* Usage of `AbstractHealthService` class from `Brokerage Utils` to manage **getInfo()** and **getHealth()** features.
+* Add `TrailingSlashFilter` filter to remove trailing slash from request path.
+* Generate automatic `REST_APIs.md` file from **Swagger APIs** using the `generate-rest-apis` profile.
+
+**BugFixing**
+* Fixed JSON serialization and deserialization issues.
+* Remove unused `TmfApiFactory` class.
+* Replace **RestTemplate** for **RestClient**.
+
+
 ### <code>1.2.1</code> :calendar: 15/07/2025
 **Improvements**
 * Update of the `basePath` for building TMForum API URLs with or without **envoy** usage.

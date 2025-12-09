@@ -12,6 +12,9 @@ build:
   version: "@project.version@"
   timestamp: "@timestamp@"
   
+spring:
+  jackson:
+    default-property-inclusion: non_empty
 
 # Logging Configuration
 logging:
@@ -40,25 +43,20 @@ management:
       show-details: never
   health:
     probes:
-  enabled: true	
+      enabled: true	
 
 # Billing Service
 billing:
   invoicing_service: ${INVOICING_SERVICE:http://localhost:8380}
   billing_engine: ${BILLING_ENGINE:http://localhost:8080}
-
-# TMForum Endpoints
+  
 tmforumapi:
   tmf_endpoint: ${TMF_ENDPOINT:http://tm-forum-api}
-    
-  # tmf_envoy = false => use specific path for any tmforum software | tmf_envoy = true => use TMF_ENDPOINT as unique path (proxy) 
   tmf_envoy:  ${TMF_ENVOY:true}
-    
-  # TMF_ENVOY=false - valid only if envoy false
+  # valid only if envoy false
   tmf_namespace:  ${TMF_NAMESPACE:marketplace}
   tmf_postfix:  ${TMF_POSTFIX:svc.cluster.local}
   tmf_port:  ${TMF_PORT:8080}
-     
-  # TMF_ENVOY=true - internal paths used with envoy = true
-  tmf620_catalog_path: tmf-api/productCatalogManagement/v4
   
+  tmf620_catalog_path: tmf-api/productCatalogManagement/v4
+  tmf637_billing_path: tmf-api/productInventory/v4
