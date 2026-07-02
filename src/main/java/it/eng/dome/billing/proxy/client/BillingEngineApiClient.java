@@ -39,8 +39,11 @@ public class BillingEngineApiClient {
 	
 	@Autowired
 	private RestClient restClient;
+	@Autowired
+	private RestClient restClientProxy;
 	
-	private  final String billinEngineUrl; 
+	private final String billinEngineUrl;
+
 	
 	/**
 	 * Constructor initializing the baseUrl of the default DOME BillingEngine component
@@ -62,14 +65,22 @@ public class BillingEngineApiClient {
     public ProductOrder billingPreviewPrice(@NotNull BillingPreviewRequestDTO billingPreviewRequestDTO, String endpoint) throws BillingProxyException{ 
     	
     	String url;
-    	if(endpoint!=null)
-    		url= URLUtils.buildUrl(endpoint, PREVIEW_PRICE_PATH);
-    	else
-    		url =URLUtils.buildUrl(billinEngineUrl, PREVIEW_PRICE_PATH);
+    	RestClient clientRest;
+    	
+    	if(endpoint != null) {
+    		clientRest = restClientProxy;    		
+    		url = URLUtils.buildUrl(endpoint, PREVIEW_PRICE_PATH);
+    		logger.debug("Calling {} using RestClient with caddy-proxy", url);
+    	}else {
+    		// internal BE 
+    		clientRest = restClient;   
+    		url = URLUtils.buildUrl(billinEngineUrl, PREVIEW_PRICE_PATH);
+    		logger.debug("Calling {} using RestClient direct", url);
+    	}
     	
 		logger.info("Invocation of Billing Engine API: {}", url);
 		
-		ResponseEntity<ProductOrder> response = restClient.post()
+		ResponseEntity<ProductOrder> response = clientRest.post()
 	        .uri(url)
 	        .contentType(MediaType.APPLICATION_JSON)
 	        .body(billingPreviewRequestDTO)
@@ -94,14 +105,22 @@ public class BillingEngineApiClient {
     public List<Invoice> billingBill(@NotNull BillingRequestDTO billingRequestDTO, String endpoint) throws BillingProxyException{
     	
     	String url;
-    	if(endpoint!=null)
-    		url= URLUtils.buildUrl(endpoint, BILL_PATH);
-    	else
-    		url =URLUtils.buildUrl(billinEngineUrl, BILL_PATH);
+    	RestClient clientRest;
     	
-		logger.info("Invocation of Billing Engine API: {}", url);
-		
-		ResponseEntity<List<Invoice>> response = restClient.post()
+    	if(endpoint != null) {
+    		clientRest = restClientProxy;    		
+    		url = URLUtils.buildUrl(endpoint, BILL_PATH);
+    		logger.debug("Calling {} using RestClient with caddy-proxy", url);
+    	}else {
+    		// internal BE 
+    		clientRest = restClient;   
+    		url = URLUtils.buildUrl(billinEngineUrl, BILL_PATH);
+    		logger.debug("Calling {} using RestClient direct", url);
+    	}
+
+    	logger.info("Invocation of Billing Engine API: {}", url);
+    	
+		ResponseEntity<List<Invoice>> response = clientRest.post()
 		        .uri(url)
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .body(billingRequestDTO)
@@ -126,14 +145,22 @@ public class BillingEngineApiClient {
     public List<Invoice> billingInstantBill(@NotNull InstantBillingRequestDTO instantBillingRequestDTO, String endpoint) throws BillingProxyException{
     	
     	String url;
-    	if(endpoint!=null)
-    		url= URLUtils.buildUrl(endpoint, INSTANT_BILL_PATH);
-    	else
-    		url =URLUtils.buildUrl(billinEngineUrl, INSTANT_BILL_PATH);
+    	RestClient clientRest;
+    	
+    	if(endpoint != null) {
+    		clientRest = restClientProxy;    		
+    		url = URLUtils.buildUrl(endpoint, INSTANT_BILL_PATH);
+    		logger.debug("Calling {} using RestClient with caddy-proxy", url);
+    	}else {
+    		// internal BE 
+    		clientRest = restClient;   
+    		url = URLUtils.buildUrl(billinEngineUrl, INSTANT_BILL_PATH);
+    		logger.debug("Calling {} using RestClient direct", url);
+    	}
     	
 		logger.info("Invocation of Billing Engine API: {}", url);
 		
-		ResponseEntity<List<Invoice>> response = restClient.post()
+		ResponseEntity<List<Invoice>> response = clientRest.post()
 		        .uri(url)
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .body(instantBillingRequestDTO)

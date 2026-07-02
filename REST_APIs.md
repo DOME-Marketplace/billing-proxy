@@ -1,6 +1,6 @@
 # Billing Proxy
 
-**Version:** 2.0.0  
+**Version:** 2.2.0  
 **Description:** Swagger REST APIs for the billing-proxy software  
 
 
