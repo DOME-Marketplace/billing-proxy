@@ -85,7 +85,8 @@ public class BillingProxyService {
 		// USE CASE 2: All with URLs and all the same. Will be invoked the external BE for all the ProductOrderItem(s)
 		else if (mapByUrl.size() == 1 && !mapByUrl.containsKey("__NO_URL__")) {
 		    String url = mapByUrl.keySet().iterator().next();
-		    updatedProductOrder=billingEngineApiClient.billingPreviewPrice(billingPreviewRequestDTO, url);
+		    logger.debug("External billing proxy endpoint found: {}", url);
+		    updatedProductOrder=billingEngineApiClient.billingPreviewPrice(billingPreviewRequestDTO, url);		    
 		    
 		}else {
 		// USE CASE 3: Mixed case: some with URLs, some without. Will be invoked the BE (external BE or the DOME BE) for each ProductOrderItem
@@ -106,8 +107,10 @@ public class BillingProxyService {
 		            
 		            if ("__NO_URL__".equals(url))
 		            	tempProdutOrder=billingEngineApiClient.billingPreviewPrice(tempBillingPreviewRequestDTO, null);
-		            else
+		            else {
+		            	logger.debug("External billing proxy endpoint found: {}", url);
 		            	tempProdutOrder=billingEngineApiClient.billingPreviewPrice(tempBillingPreviewRequestDTO, url);
+		            			            }
 		           
 		            temporaryProductOrders.add(tempProdutOrder);
 			    }
@@ -164,6 +167,7 @@ public class BillingProxyService {
 		
 		String beEnpoint=null;
 		if(product.getProductOffering()!=null) {
+			logger.debug("External billing proxy endpoint found: {}", beEnpoint);
 			beEnpoint=this.getPricingLogicAlgorithm(product.getProductOffering().getId());
 		}
 		

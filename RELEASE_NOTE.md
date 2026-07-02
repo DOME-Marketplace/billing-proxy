@@ -2,6 +2,12 @@
 
 **Release Notes** of the *Billing Proxy* software:
 
+### <code>2.2.0</code> :calendar: 02/07/2026
+**Improvements**
+* Set proxy configuration in `application.yml` and `BillingEngineApiClient` for invoking external Billing Engine via `caddy-proxy`. 
+* Usage of the `Brokerage Utils` version: `2.2.8`.
+
+
 ### <code>2.1.0</code> :calendar: 09/12/2025
 **Improvements**
 * Added management for the use of **external** Billing Engine(s)

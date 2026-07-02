@@ -47,7 +47,7 @@ public class BillingProxyController {
 		if(billingPreviewRequestDTO.getProductOrder()==null)
 			throw new BillingProxyException("Error in the BillingPreviewRequestDTO: the ProductOrder is null");
 		else {
-			ProductOrder productOrder=billingProxyService.billingPreviewPrice(billingPreviewRequestDTO);
+			ProductOrder productOrder = billingProxyService.billingPreviewPrice(billingPreviewRequestDTO);
 			return ResponseEntity.ok(billingProxyService.invoicingPreviewTaxes(productOrder));
 		}
 	}

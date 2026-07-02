@@ -53,3 +53,9 @@ tmforumapi:
   
   tmf620_catalog_path: tmf-api/productCatalogManagement/v4
   tmf637_billing_path: tmf-api/productInventory/v4
+
+proxy:
+  proxyHost: ${PROXY_HOST:caddy-proxy.caddy-proxy.svc.cluster.local}
+  proxyPort: ${PROXY_PORT:8080}
+  proxyUser: ${PROXY_USERNAME:myuser}
+  proxyPassword: ${PROXY_PASSWORD:mypass}

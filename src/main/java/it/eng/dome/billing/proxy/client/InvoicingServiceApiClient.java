@@ -54,12 +54,13 @@ public class InvoicingServiceApiClient {
     public ProductOrder invoicingPreviewTaxes(@NotNull ProductOrder productOrder, String endpoint) throws BillingProxyException{
     	
     	String url;
-    	if(endpoint!=null)
-    		url= URLUtils.buildUrl(endpoint, PREVIEW_TAXES_PATH);
-    	else
-    		url =URLUtils.buildUrl(invoiceServiceUrl, PREVIEW_TAXES_PATH);
+    	if(endpoint != null) {    		
+    		url = URLUtils.buildUrl(endpoint, PREVIEW_TAXES_PATH);
+    	}else {
+    		url = URLUtils.buildUrl(invoiceServiceUrl, PREVIEW_TAXES_PATH);
+    	}
 
-		logger.info("Invocation of InvoicingService API: {}", PREVIEW_TAXES_PATH);
+		logger.info("Invocation of InvoicingService API: {}", url);
 		
 		ResponseEntity<ProductOrder> response = restClient.post()
 	        .uri(url)
@@ -87,12 +88,12 @@ public class InvoicingServiceApiClient {
     public List<Invoice> invoicingApplyTaxes(@NotNull List<Invoice> invoices, String endpoint) throws BillingProxyException{
     	
     	String url;
-    	if(endpoint!=null)
-    		url= URLUtils.buildUrl(endpoint, APPLY_TAXES_PATH);
+    	if(endpoint != null)
+    		url = URLUtils.buildUrl(endpoint, APPLY_TAXES_PATH);
     	else
-    		url =URLUtils.buildUrl(invoiceServiceUrl, APPLY_TAXES_PATH);
+    		url = URLUtils.buildUrl(invoiceServiceUrl, APPLY_TAXES_PATH);
     	
-		logger.info("Invocation of InvoicingService API: {}", APPLY_TAXES_PATH);
+		logger.info("Invocation of InvoicingService API: {}", url);
 
 		ResponseEntity<List<Invoice>> response = restClient.post()
 	        .uri(url)
